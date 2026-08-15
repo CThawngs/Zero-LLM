@@ -1,0 +1,295 @@
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+export function formatNumber(num: number | null | undefined): string {
+  if (num == null) return 'N/A';
+  return new Intl.NumberFormat().format(num);
+}
+
+export function formatCurrency(amount: number | null | undefined): string {
+  if (amount == null || amount === 0) return '$0.00';
+  return `$${amount.toFixed(4)}`;
+}
+
+export function formatContextWindow(tokens: number | null | undefined): string {
+  if (tokens == null || tokens === 0) return 'N/A';
+  if (tokens >= 1_000_000) {
+    const m = tokens / 1_000_000;
+    return `${m % 1 === 0 ? m : m.toFixed(1)}M`;
+  }
+  if (tokens >= 1_000) {
+    const k = tokens / 1_000;
+    return `${k % 1 === 0 ? k : k.toFixed(0)}K`;
+  }
+  return `${tokens}`;
+}
+
+export function truncate(text: string | null | undefined, length: number): string {
+  if (!text) return '';
+  if (text.length <= length) return text;
+  return text.slice(0, length) + '…';
+}
+
+export function getInitials(name: string): string {
+  if (!name) return 'LLM';
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+}
+
+export function getProviderColor(name: string): string {
+  const colors = [
+    '#C4A484', '#A8927A', '#8F9779', '#829AB1', 
+    '#B197B3', '#D08770', '#88C0D0', '#B48EAD'
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % colors.length;
+  return colors[index];
+}
+
+export type ModelCategoryKey = 'Text' | 'Vision' | 'Audio' | 'Speech' | 'Video' | 'Other';
+
+export interface ModelCategoryInfo {
+  key: ModelCategoryKey;
+  labelEn: string;
+  labelVi: string;
+  badgeClass: string;
+}
+
+export function getModelCategoryInfo(model: {
+  category?: string | null;
+  name?: string | null;
+  model_api_id?: string | null;
+  multimodal?: boolean;
+}): ModelCategoryInfo {
+  const cat = (model.category || '').toLowerCase();
+  const name = (model.name || '').toLowerCase();
+  const apiId = (model.model_api_id || '').toLowerCase();
+
+  if (cat.includes('speech') || cat.includes('tts') || cat.includes('voice') || name.includes('tts') || name.includes('elevenlabs') || apiId.includes('tts')) {
+    return {
+      key: 'Speech',
+      labelEn: 'Speech',
+      labelVi: 'Speech (Giọng nói)',
+      badgeClass: 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30',
+    };
+  }
+  if (cat.includes('audio') || name.includes('whisper') || name.includes('music') || name.includes('bark') || name.includes('audio') || apiId.includes('whisper')) {
+    return {
+      key: 'Audio',
+      labelEn: 'Audio',
+      labelVi: 'Audio (Âm thanh)',
+      badgeClass: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30',
+    };
+  }
+  if (cat.includes('video') || name.includes('sora') || name.includes('runway') || name.includes('pika') || name.includes('video') || apiId.includes('video')) {
+    return {
+      key: 'Video',
+      labelEn: 'Video',
+      labelVi: 'Video',
+      badgeClass: 'bg-pink-500/15 text-pink-700 dark:text-pink-300 border-pink-500/30',
+    };
+  }
+  if (model.multimodal || cat.includes('vision') || cat.includes('image') || cat.includes('multimodal') || name.includes('vision') || name.includes('vl') || name.includes('pixtral') || name.includes('llava') || apiId.includes('vision') || apiId.includes('vl')) {
+    return {
+      key: 'Vision',
+      labelEn: 'Vision',
+      labelVi: 'Vision (Thị giác)',
+      badgeClass: 'bg-cyan-500/15 text-cyan-700 dark:text-cyan-300 border-cyan-500/30',
+    };
+  }
+  if (cat.includes('text') || cat.includes('general') || cat.includes('reasoning') || cat.includes('fast') || cat.includes('small') || cat.includes('code') || name.includes('llama') || name.includes('deepseek') || name.includes('qwen') || name.includes('gemma') || name.includes('mistral') || name.includes('gemini') || name.includes('claude')) {
+    return {
+      key: 'Text',
+      labelEn: 'Text',
+      labelVi: 'Text (Văn bản)',
+      badgeClass: 'bg-purple-500/15 text-purple-700 dark:text-purple-300 border-purple-500/30',
+    };
+  }
+
+  return {
+    key: 'Other',
+    labelEn: 'Other',
+    labelVi: 'Other (Khác)',
+    badgeClass: 'bg-slate-500/15 text-slate-700 dark:text-slate-300 border-slate-500/30',
+  };
+}
+
+/**
+ * Intelligent fuzzy and multi-token search matching for models and providers.
+ * Supports tokenized search (e.g. "gemini 3.7", "llama 3.3", "deepseek r1", "3.7 flash")
+ * ignoring case, hyphens, colons, underscores, and slashes.
+ */
+export function normalizeSearchString(str: string): string {
+  return str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // remove accents
+    .replace(/[-_/:,.]+/g, ' ') // convert punctuation to spaces
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+export function matchesSearchQuery(
+  rawQuery: string | null | undefined,
+  fields: (string | null | undefined | boolean | number)[]
+): boolean {
+  if (!rawQuery || !rawQuery.trim()) return true;
+
+  const cleanQuery = normalizeSearchString(rawQuery);
+  if (!cleanQuery) return true;
+
+  // Split query into tokens
+  const queryTokens = cleanQuery.split(' ').filter(Boolean);
+
+  // Combine all searchable field contents into one normalized corpus
+  const joinedText = fields
+    .filter((f) => f != null)
+    .map((f) => String(f))
+    .join(' ');
+
+  const normalizedCorpus = normalizeSearchString(joinedText);
+  const rawCorpusLower = joinedText.toLowerCase();
+
+  // Also create a continuous alphanumeric version (e.g. "gemini3.7flash" / "llama3.3")
+  const compactCorpus = normalizedCorpus.replace(/\s+/g, '');
+  const compactQuery = cleanQuery.replace(/\s+/g, '');
+
+  // If compact query directly exists in compact corpus (e.g. "gemini3.7" in "gemini37flash")
+  if (compactCorpus.includes(compactQuery)) {
+    return true;
+  }
+
+  // Every token in the search query must appear in the corpus
+  return queryTokens.every((token) => {
+    const compactToken = token.replace(/\s+/g, '');
+    return (
+      normalizedCorpus.includes(token) ||
+      rawCorpusLower.includes(token) ||
+      compactCorpus.includes(compactToken)
+    );
+  });
+}
+
+/**
+ * Canonical provider mappings to eliminate duplicate cards
+ * (e.g. "cloudflare", "cloudflare-workers", "cloudflare-workers-ai" -> "cloudflare-workers-ai")
+ */
+export function getCanonicalProviderInfo(name: string, slug?: string): { canonicalSlug: string; canonicalName: string } {
+  const norm = (name + ' ' + (slug || '')).toLowerCase();
+  
+  if (norm.includes('cloudflare')) {
+    return { canonicalSlug: 'cloudflare-workers-ai', canonicalName: 'Cloudflare Workers AI' };
+  }
+  if (norm.includes('cerebras')) {
+    return { canonicalSlug: 'cerebras', canonicalName: 'Cerebras AI' };
+  }
+  if (
+    norm.includes('google') &&
+    (norm.includes('ai studio') || norm.includes('studio') || norm.includes('gemini') || slug === 'google-ai' || slug === 'google-aistudio')
+  ) {
+    return { canonicalSlug: 'google-aistudio', canonicalName: 'Google AI Studio' };
+  }
+  if (norm.includes('siliconflow') || norm.includes('siliconcloud')) {
+    return { canonicalSlug: 'siliconflow', canonicalName: 'SiliconFlow (SiliconCloud)' };
+  }
+  if (norm.includes('sambanova')) {
+    return { canonicalSlug: 'sambanova', canonicalName: 'SambaNova Systems' };
+  }
+  if (norm.includes('nvidia') && (norm.includes('nim') || norm.includes('build'))) {
+    return { canonicalSlug: 'nvidia-nim', canonicalName: 'NVIDIA Build NIMs' };
+  }
+  if (norm.includes('hugging') && norm.includes('face')) {
+    return { canonicalSlug: 'huggingface', canonicalName: 'Hugging Face Inference API' };
+  }
+  if (norm.includes('mistral')) {
+    return { canonicalSlug: 'mistral', canonicalName: 'Mistral AI (La Plateforme)' };
+  }
+  if (norm.includes('github')) {
+    return { canonicalSlug: 'github-models', canonicalName: 'GitHub Models' };
+  }
+  if (norm.includes('openrouter')) {
+    return { canonicalSlug: 'openrouter', canonicalName: 'OpenRouter' };
+  }
+  if (norm.includes('groq')) {
+    return { canonicalSlug: 'groq', canonicalName: 'Groq' };
+  }
+  if (norm.includes('deepinfra')) {
+    return { canonicalSlug: 'deepinfra', canonicalName: 'DeepInfra' };
+  }
+  if (norm.includes('cohere')) {
+    return { canonicalSlug: 'cohere', canonicalName: 'Cohere' };
+  }
+  if (norm.includes('fireworks')) {
+    return { canonicalSlug: 'fireworks-ai', canonicalName: 'Fireworks AI' };
+  }
+  if (norm.includes('together')) {
+    return { canonicalSlug: 'together-ai', canonicalName: 'Together AI' };
+  }
+
+  const cleanSlug = slug || name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  return { canonicalSlug: cleanSlug, canonicalName: name };
+}
+
+/**
+ * Deduplicates and merges multiple provider records with identical canonical identities.
+ */
+export function deduplicateAndMergeProviders<T extends { id: string; name: string; slug: string; logo_url?: string | null; description?: string | null; signup_url?: string | null; website?: string | null; api_key_guide?: string | null; models: any[] }>(
+  providers: T[]
+): T[] {
+  const map = new Map<string, T>();
+
+  for (const prov of providers) {
+    if (!prov) continue;
+    const { canonicalSlug, canonicalName } = getCanonicalProviderInfo(prov.name, prov.slug);
+    const key = canonicalSlug;
+
+    if (!map.has(key)) {
+      map.set(key, {
+        ...prov,
+        name: canonicalName,
+        slug: canonicalSlug,
+        models: [...(prov.models || [])],
+      });
+    } else {
+      const existing = map.get(key)!;
+      // Merge models, avoiding duplicate model_api_id
+      const existingModelIds = new Set((existing.models || []).map((m: any) => String(m.model_api_id || m.name).toLowerCase()));
+      const mergedModels = [...(existing.models || [])];
+
+      for (const m of prov.models || []) {
+        const idKey = String(m.model_api_id || m.name).toLowerCase();
+        if (!existingModelIds.has(idKey)) {
+          existingModelIds.add(idKey);
+          mergedModels.push({
+            ...m,
+            provider_id: existing.id,
+          });
+        }
+      }
+
+      map.set(key, {
+        ...existing,
+        // Prefer valid non-empty and higher quality fields
+        logo_url: existing.logo_url || prov.logo_url,
+        description: (existing.description && existing.description.length > (prov.description?.length || 0))
+          ? existing.description
+          : (prov.description || existing.description),
+        signup_url: existing.signup_url || prov.signup_url,
+        website: existing.website || prov.website,
+        api_key_guide: existing.api_key_guide || prov.api_key_guide,
+        models: mergedModels,
+      });
+    }
+  }
+
+  return Array.from(map.values());
+}
+

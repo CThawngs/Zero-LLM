@@ -1,0 +1,119 @@
+{
+  "hero": {
+    "volume": "PHIÊN BẢN 01 / THƯ VIỆN & XẾP HẠNG REALTIME",
+    "title": "DANH MỤC LLM MIỄN PHÍ",
+    "subtitle": "BẢNG XẾP HẠNG & MONITORING TRỰC TIẾP",
+    "description": "Thư viện tổng hợp và giám sát thời gian thực về các nhà cung cấp API LLM 0 đồng, phần cứng suy luận tốc độ cao LPU và các mô hình AI mã nguồn mở context khủng.",
+    "cta_explore": "Khám phá Nhà Cung Cấp",
+    "cta_llms_txt": "Xem Chuẩn LLMs.txt"
+  },
+  "stats": {
+    "providers": "NHÀ CUNG CẤP",
+    "totalModels": "TỔNG SỐ MODEL LLM",
+    "freeModels": "MODEL MIỄN PHÍ 100%",
+    "contextMax": "CONTEXT KHỦNG NHẤT"
+  },
+  "tabs": {
+    "providers": "Danh Sách Provider (Toggle)",
+    "models": "Toàn Bộ Model LLM",
+    "charts": "Biểu Đồ Thống Kê Realtime"
+  },
+  "providerSearch": {
+    "placeholder": "Tìm kiếm nhà cung cấp (Groq, OpenRouter, Gemini...)...",
+    "all_tiers": "Tất Cả Loại Giá",
+    "free_tier_only": "Chỉ Provider 100% Miễn Phí",
+    "freemium_tier": "Provider Freemium (Có Free)",
+    "sort_by": "Sắp xếp Provider",
+    "sort_models_desc": "Nhiều Model Nhất",
+    "sort_name_asc": "Tên Provider (A-Z)",
+    "sort_context_desc": "Context Lớn Nhất",
+    "no_providers": "Không tìm thấy nhà cung cấp LLM phù hợp với bộ lọc."
+  },
+  "modelSearch": {
+    "placeholder": "Tìm kiếm tên model, API ID (vd: llama-3.3, gemini-2.0, deepseek-r1)...",
+    "all_categories": "Tất Cả Danh Mục Model",
+    "free_only": "Chỉ Models 0 Đồng",
+    "multimodal_only": "Chỉ Model Đa Phương Thức (Vision/Audio)",
+    "sort_by": "Sắp Xếp Model",
+    "sort_context_desc": "Context Window (Giảm Dần)",
+    "sort_context_asc": "Context Window (Tăng Dần)",
+    "sort_name_asc": "Tên Model (A-Z)",
+    "sort_popularity_desc": "Độ Phổ Biến Cao Nhất",
+    "no_models": "Không tìm thấy model LLM nào khớp với từ khóa/bộ lọc."
+  },
+  "accordion": {
+    "expand": "Xem danh sách Model",
+    "collapse": "Thu gọn Model",
+    "show_more": "Hiển thị thêm",
+    "remaining_models": "model còn lại",
+    "showing_count": "Đang hiển thị",
+    "of_total": "trên tổng số",
+    "models_label": "models",
+    "copy_model_name": "Sao chép API ID Model",
+    "copied": "Đã sao chép!"
+  },
+  "provider": {
+    "free": "100% MIỄN PHÍ",
+    "freemium": "FREE + TRẢ PHÍ",
+    "modelsCount": "models khả dụng",
+    "viewDetails": "Chi Tiết Provider",
+    "getApiKey": "Đăng Ký Lấy API Key",
+    "website": "Trang Chủ Chính Thức",
+    "apiKeyGuide": "Hướng Dẫn Lấy API Key"
+  },
+  "charts": {
+    "contextTitle": "TOP MODEL THEO CONTEXT (BIỂU ĐỒ CỘT)",
+    "categoryTitle": "PHÂN BỔ LOẠI MODEL AI (BIỂU ĐỒ TRÒN / PIE)",
+    "providerTitle": "SỐ MODEL TRÊN MỖI PROVIDER (BIỂU ĐỒ CỘT DỌC)",
+    "freeVsPaidTitle": "TỶ LỆ MODEL MIỄN PHÍ VS TRẢ PHÍ (DONUT CHART)",
+    "rateLimitTitle": "GIỚI HẠN SPEED RPM CỦA MODEL (BIỂU ĐỒ ĐƯỜNG / LINE CHART)",
+    "contextTrendTitle": "XU HƯỚNG CONTEXT WINDOW (BIỂU ĐỒ DIỆN TÍCH / AREA CHART)",
+    "avgContext": "CONTEXT TRUNG BÌNH",
+    "types": {
+      "text": "Text (Văn bản)",
+      "vision": "Vision (Thị giác)",
+      "audio": "Audio (Âm thanh)",
+      "video": "Video",
+      "speech": "Speech (Giọng nói)",
+      "other": "Other (Khác)"
+    }
+  },
+  "table": {
+    "modelName": "TÊN MODEL LLM",
+    "apiId": "MODEL API ID",
+    "context": "CONTEXT WINDOW",
+    "tier": "MỨC PHÍ",
+    "rates": "GIỚI HẠN RATE LIMIT",
+    "type": "LOẠI MODEL",
+    "action": "LIÊN KẾT ENDPOINT",
+    "details": "Chi Tiết"
+  },
+  "detail": {
+    "back": "Quay lại Bảng Xếp Hạng",
+    "back_provider": "Quay lại Provider",
+    "access_api": "Truy Cập Model API",
+    "context_window": "Context Window",
+    "cost_tier": "Mức Phí",
+    "multimodal_support": "Hỗ Trợ Đa Phương Thức",
+    "category": "Danh Mục",
+    "rate_limits": "Giới Hạn Rate Limits & Quota",
+    "rpm": "Số Yêu Cầu / Phút (RPM)",
+    "rpd": "Số Yêu Cầu / Ngày (RPD)",
+    "hosted_by": "Cung Cấp Bởi",
+    "view_provider": "Xem Provider",
+    "instructions": "Hướng Dẫn",
+    "api_key_setup": "Cấu Hình API Key",
+    "unlimited": "Không Giới Hạn",
+    "free_100": "100% Miễn Phí",
+    "paid": "Trả Phí / Freemium",
+    "yes": "Có (Đa Phương Thức)",
+    "text_only": "Chỉ Văn Bản"
+  },
+  "footer": {
+    "copyright": "© CThawngs (Zero). Giám Sát & Xếp Hạng Provider LLM Miễn Phí.",
+    "realtime_active": "KẾT NỐI REALTIME WEBSOCKET",
+    "realtime_polling": "TỰ ĐỘNG LÀM MỚI POLLING",
+    "api_health": "Trạng Thái API",
+    "llms_txt": "Chuẩn LLMs.txt"
+  }
+}

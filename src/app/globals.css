@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg-main: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F1F5F9;
+  --bg-input: #FFFFFF;
+  --text-main: #0F172A;
+  --text-sub: #334155;
+  --text-muted: #64748B;
+  --accent: #D97706;
+  --accent-hover: #B45309;
+  --accent-light: rgba(217, 119, 6, 0.12);
+  --border-color: #E2E8F0;
+  --border-hover: rgba(217, 119, 6, 0.5);
+  --header-bg: rgba(255, 255, 255, 0.92);
+}
+
+.dark {
+  --bg-main: #0B0F19;
+  --bg-card: #111827;
+  --bg-card-hover: #1E293B;
+  --bg-input: #1E293B;
+  --text-main: #F8FAFC;
+  --text-sub: #CBD5E1;
+  --text-muted: #94A3B8;
+  --accent: #F59E0B;
+  --accent-hover: #D97706;
+  --accent-light: rgba(245, 158, 11, 0.12);
+  --border-color: rgba(255, 255, 255, 0.12);
+  --border-hover: rgba(245, 158, 11, 0.4);
+  --header-bg: rgba(11, 15, 25, 0.85);
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: #F8FAFC;
+  color: #0F172A;
+  font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html.dark {
+  background-color: #0B0F19;
+  color: #F8FAFC;
+}
+
+body {
+  min-height: 100vh;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Stitch Ambient Backdrop Glow */
+.stitch-ambient-bg {
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(245, 158, 11, 0.08) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+}
+
+.theme-card {
+  background-color: var(--bg-card);
+  border-color: var(--border-color);
+  color: var(--text-main);
+}
+
+.theme-input {
+  background-color: var(--bg-input);
+  border-color: var(--border-color);
+  color: var(--text-main);
+}
+
+.theme-header {
+  background-color: var(--header-bg);
+  border-color: var(--border-color);
+}
+
+/* Glassmorphism card */
+.stitch-glass-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}

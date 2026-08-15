@@ -1,0 +1,15 @@
+node_modules/
+.next/
+.git/
+*.log
+.env*
+__pycache__/
+*.pyc
+backups/
+*.json
+!package.json
+dist/
+build/
+coverage/
+.vercel/
+.netlify/

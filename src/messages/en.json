@@ -1,0 +1,119 @@
+{
+  "hero": {
+    "volume": "VOLUME 01 / REALTIME DIRECTORY & LEADERBOARD",
+    "title": "FREE LLM DIRECTORY",
+    "subtitle": "LIVE MONITORING & LEADERBOARD",
+    "description": "A curated, live-monitored directory of zero-cost LLM API providers, ultra-fast inference LPUs, and large-context open-weights models.",
+    "cta_explore": "Explore Providers",
+    "cta_llms_txt": "View LLMs.txt Specification"
+  },
+  "stats": {
+    "providers": "ACTIVE PROVIDERS",
+    "totalModels": "TOTAL INDEXED MODELS",
+    "freeModels": "100% FREE MODELS",
+    "contextMax": "MAX CONTEXT WINDOW"
+  },
+  "tabs": {
+    "providers": "Provider Accordions",
+    "models": "All LLM Models Table",
+    "charts": "Realtime Analytics"
+  },
+  "providerSearch": {
+    "placeholder": "Search provider by name, slug, or capabilities (Groq, OpenRouter, Gemini...)...",
+    "all_tiers": "All Cost Tiers",
+    "free_tier_only": "100% Free Tier Providers Only",
+    "freemium_tier": "Freemium Providers (Has Free Tier)",
+    "sort_by": "Sort Providers",
+    "sort_models_desc": "Most Models First",
+    "sort_name_asc": "Provider Name (A-Z)",
+    "sort_context_desc": "Highest Context First",
+    "no_providers": "No LLM providers match your filter criteria."
+  },
+  "modelSearch": {
+    "placeholder": "Search model name, API ID (e.g., llama-3.3, gemini-2.0, deepseek-r1)...",
+    "all_categories": "All Model Categories",
+    "free_only": "Zero-Cost Models Only",
+    "multimodal_only": "Multimodal Only (Vision/Audio)",
+    "sort_by": "Sort Models",
+    "sort_context_desc": "Context Window (Descending)",
+    "sort_context_asc": "Context Window (Ascending)",
+    "sort_name_asc": "Model Name (A-Z)",
+    "sort_popularity_desc": "Highest Popularity",
+    "no_models": "No LLM models match your search or filter settings."
+  },
+  "accordion": {
+    "expand": "View Models",
+    "collapse": "Collapse Models",
+    "show_more": "Show More",
+    "remaining_models": "models remaining",
+    "showing_count": "Showing",
+    "of_total": "of total",
+    "models_label": "models",
+    "copy_model_name": "Copy Model API ID",
+    "copied": "Copied!"
+  },
+  "provider": {
+    "free": "100% FREE TIER",
+    "freemium": "FREE + PAID",
+    "modelsCount": "models available",
+    "viewDetails": "View Provider Details",
+    "getApiKey": "Get Free API Key",
+    "website": "Official Website",
+    "apiKeyGuide": "API Key Instructions"
+  },
+  "charts": {
+    "contextTitle": "TOP MODELS BY CONTEXT SIZE (BAR CHART)",
+    "categoryTitle": "MODEL TYPES BREAKDOWN (PIE CHART)",
+    "providerTitle": "MODELS OFFERED PER PROVIDER (MULTI-BAR)",
+    "freeVsPaidTitle": "FREE VS PAID MODEL RATIO (DONUT CHART)",
+    "rateLimitTitle": "MODEL RATE LIMITS (RPM) CAPACITY (LINE CHART)",
+    "contextTrendTitle": "CONTEXT SIZE DISTRIBUTION (SMOOTH AREA CHART)",
+    "avgContext": "AVERAGE CONTEXT WINDOW",
+    "types": {
+      "text": "Text",
+      "vision": "Vision",
+      "audio": "Audio",
+      "video": "Video",
+      "speech": "Speech",
+      "other": "Other"
+    }
+  },
+  "table": {
+    "modelName": "MODEL NAME",
+    "apiId": "MODEL API ID",
+    "context": "CONTEXT WINDOW",
+    "tier": "COST TIER",
+    "rates": "RATE LIMITS",
+    "type": "CATEGORY",
+    "action": "ENDPOINT LINK",
+    "details": "Details"
+  },
+  "detail": {
+    "back": "Back to Leaderboard",
+    "back_provider": "Back to Provider",
+    "access_api": "Access Model API",
+    "context_window": "Context Window",
+    "cost_tier": "Cost Tier",
+    "multimodal_support": "Multimodal Support",
+    "category": "Category",
+    "rate_limits": "Rate Limits & Quotas",
+    "rpm": "Requests Per Minute (RPM)",
+    "rpd": "Requests Per Day (RPD)",
+    "hosted_by": "Hosted By",
+    "view_provider": "View Provider",
+    "instructions": "Instructions",
+    "api_key_setup": "API Key Setup",
+    "unlimited": "Unlimited",
+    "free_100": "100% Free",
+    "paid": "Paid Tier",
+    "yes": "Yes",
+    "text_only": "Text Only"
+  },
+  "footer": {
+    "copyright": "© CThawngs (Zero). Continuous Free LLM Provider Indexing.",
+    "realtime_active": "REALTIME WEBSOCKET ACTIVE",
+    "realtime_polling": "POLLING REFRESH ACTIVE",
+    "api_health": "API Health",
+    "llms_txt": "LLMs.txt Spec"
+  }
+}
