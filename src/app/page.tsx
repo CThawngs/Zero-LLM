@@ -4,7 +4,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import type { ProviderWithModels, FlatModel, RealtimeStatus } from '@/lib/types';
 import { fetchProvidersWithModels, fetchModelsFlat } from '@/lib/data';
 import { subscribeToProvidersAndModels } from '@/lib/realtime';
-import { trackPageView } from '@/lib/track';
+import { trackPageView, trackCtaClick } from '@/lib/track';
+import { Github, ExternalLink } from 'lucide-react';
 import { NewDiscoveries } from '@/components/NewDiscoveries';
 import { StatisticsSection } from '@/components/StatisticsSection';
 import { ControlsSection, ControlsState } from '@/components/ControlsSection';
@@ -151,6 +152,30 @@ export default function HomePage() {
             : 'Track, compare, and discover the best zero-cost Large Language Model providers available today. Continuously updated by the community.'}
         </p>
       </section>
+
+      {/* GITHUB REPO CALL-TO-ACTION BUTTON (CENTERED, THEME-ADAPTIVE & SMOOTH ANIMATION) */}
+      <div className="flex justify-center items-center my-4 sm:my-6">
+        <a
+          id="github-repo-button"
+          href="https://github.com/CThawngs/Zero-LLM"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => trackCtaClick('github_repo')}
+          className="group inline-flex items-center gap-3 px-5 sm:px-6 py-2.5 sm:py-3 rounded-2xl bg-white text-slate-800 border border-slate-200/90 shadow-sm dark:bg-slate-900 dark:text-slate-100 dark:border-slate-700/80 font-bold text-xs sm:text-sm tracking-wide hover:shadow-md hover:border-amber-500/50 dark:hover:border-amber-400/50 hover:bg-slate-50 dark:hover:bg-slate-850 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] transition-all duration-300 ease-out cursor-pointer"
+        >
+          {/* GitHub Logo / Avatar */}
+          <div className="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-300 text-slate-900 dark:text-slate-100">
+            <Github className="w-3.5 h-3.5" />
+          </div>
+          <span className="truncate">
+            {locale === 'vi' ? 'Xem kho mã nguồn trên GitHub' : 'View Repository on GitHub'}
+          </span>
+          <span className="hidden sm:inline-flex items-center font-mono text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:bg-amber-400/10 dark:text-amber-400 border border-amber-500/20 dark:border-amber-400/20 group-hover:border-amber-500/40 transition-colors">
+            CThawngs/Zero-LLM
+          </span>
+          <ExternalLink className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 dark:group-hover:text-amber-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0" />
+        </a>
+      </div>
 
       {/* SECTION 2: ⚡ MỚI PHÁT HIỆN (WITHIN 24H) */}
       <NewDiscoveries providers={providers} models={flatModels} />

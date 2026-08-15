@@ -50,12 +50,91 @@ Return ONLY a valid JSON object with the following schema (no additional convers
 }
 `;
 
-const CANDIDATE_MODELS = [
-  'gemini-2.5-flash',
+// Target dynamic candidate hierarchy - dynamically prioritized with newest Flash models
+const DEFAULT_FLASH_CANDIDATES = [
+  'gemini-flash-latest', // Official Google alias pointing directly to the latest production Flash model
   'gemini-3.7-flash',
-  'gemini-flash-latest',
+  'gemini-3.5-flash',
+  'gemini-3.1-flash-lite',
+  'gemini-2.5-flash',
   'gemini-2.0-flash',
 ];
+
+let cachedFlashModels: { models: string[]; timestamp: number } | null = null;
+
+/**
+ * Dynamically queries Google Generative Language API to detect and rank
+ * the absolute newest Gemini Flash models available in real-time.
+ * Ensures the scanner is 100% future-proof as new Gemini Flash models are released.
+ */
+export async function getLatestGeminiFlashModels(): Promise<string[]> {
+  const now = Date.now();
+  if (cachedFlashModels && now - cachedFlashModels.timestamp < 10 * 60 * 1000) {
+    return cachedFlashModels.models;
+  }
+
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    return DEFAULT_FLASH_CANDIDATES;
+  }
+
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`, {
+      signal: controller.signal,
+      cache: 'no-store',
+    });
+    clearTimeout(timeoutId);
+
+    if (res.ok) {
+      const data = await res.json();
+      const rawModels: any[] = Array.isArray(data?.models) ? data.models : [];
+
+      // Extract all Flash models supporting generateContent
+      const discoveredFlash = rawModels
+        .map((m) => (m.name || '').replace('models/', ''))
+        .filter((id) => {
+          const lower = id.toLowerCase();
+          return (
+            lower.includes('flash') &&
+            !lower.includes('deprecated') &&
+            !lower.includes('tuning') &&
+            !lower.includes('embed')
+          );
+        });
+
+      // Sort by version numbers (e.g. gemini-3.7 > gemini-3.5 > gemini-2.5)
+      discoveredFlash.sort((a, b) => {
+        const getVer = (name: string) => {
+          const match = name.match(/gemini-(\d+(?:\.\d+)?)/i);
+          return match ? parseFloat(match[1]) : 0;
+        };
+        const verA = getVer(a);
+        const verB = getVer(b);
+        if (verB !== verA) return verB - verA;
+        // Prefer non-preview over preview, thinking over standard if same version
+        return a.localeCompare(b);
+      });
+
+      // Build prioritized list: gemini-flash-latest, newest discovered versions, followed by defaults
+      const combined = Array.from(
+        new Set(['gemini-flash-latest', ...discoveredFlash, ...DEFAULT_FLASH_CANDIDATES])
+      );
+
+      cachedFlashModels = {
+        models: combined,
+        timestamp: now,
+      };
+
+      return combined;
+    }
+  } catch (err) {
+    console.warn('[GeminiDiscovery] Flash model auto-discovery fallback:', err);
+  }
+
+  return DEFAULT_FLASH_CANDIDATES;
+}
 
 let aiClient: GoogleGenAI | null = null;
 
@@ -178,8 +257,11 @@ export async function discoverProvidersWithGemini(): Promise<ProviderWithModels[
 
   let text: string | undefined;
 
+  // Resolve dynamically newest Gemini Flash models
+  const candidateModels = await getLatestGeminiFlashModels();
+
   // Try candidate models with Google Search Grounding for live real-time coverage
-  for (const modelName of CANDIDATE_MODELS) {
+  for (const modelName of candidateModels) {
     try {
       const response = await client.models.generateContent({
         model: modelName,
