@@ -61,18 +61,6 @@ export function ModelTable({ models, showProviderColumn = true }: ModelTableProp
                     </div>
                   )}
                 </div>
-
-                <div className="shrink-0">
-                  {m.is_free ? (
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
-                      0$ FREE
-                    </span>
-                  ) : (
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                      PAID
-                    </span>
-                  )}
-                </div>
               </div>
 
               {/* Category & Action Link */}
@@ -126,7 +114,6 @@ export function ModelTable({ models, showProviderColumn = true }: ModelTableProp
               {showProviderColumn && <th className="py-3.5 px-5">{t('stats.providers')}</th>}
               <th className="py-3.5 px-5">{t('table.context')}</th>
               <th className="py-3.5 px-5 text-center">{t('table.type')}</th>
-              <th className="py-3.5 px-5 text-center">{t('table.tier')}</th>
               <th className="py-3.5 px-5 text-right">{t('table.action')}</th>
             </tr>
           </thead>
@@ -170,19 +157,6 @@ export function ModelTable({ models, showProviderColumn = true }: ModelTableProp
                     <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold border ${categoryInfo.badgeClass}`}>
                       {locale === 'vi' ? categoryInfo.labelVi : categoryInfo.labelEn}
                     </span>
-                  </td>
-
-                  {/* Cost Tier */}
-                  <td className="py-3.5 px-5 text-center">
-                    {m.is_free ? (
-                      <span className="px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
-                        100% FREE
-                      </span>
-                    ) : (
-                      <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30">
-                        PAID TIER
-                      </span>
-                    )}
                   </td>
 
                   {/* Actions */}

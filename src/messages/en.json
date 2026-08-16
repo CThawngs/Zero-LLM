@@ -1,16 +1,16 @@
 {
   "hero": {
-    "volume": "VOLUME 01 / REALTIME DIRECTORY & LEADERBOARD",
-    "title": "FREE LLM DIRECTORY",
-    "subtitle": "LIVE MONITORING & LEADERBOARD",
-    "description": "A curated, live-monitored directory of zero-cost LLM API providers, ultra-fast inference LPUs, and large-context open-weights models.",
+    "volume": "VOLUME 01 / REALTIME FREE LLM PROVIDER DIRECTORY",
+    "title": "FREE LLM PROVIDER DIRECTORY",
+    "subtitle": "AGGREGATED & UPDATED REALTIME BY GEMINI FLASH",
+    "description": "A comprehensive directory aggregating all providers offering free LLM models on the market, continuously monitored and updated in real-time by Google's latest Gemini Flash.",
     "cta_explore": "Explore Providers",
     "cta_llms_txt": "View LLMs.txt Specification"
   },
   "stats": {
     "providers": "ACTIVE PROVIDERS",
     "totalModels": "TOTAL INDEXED MODELS",
-    "freeModels": "100% FREE MODELS",
+    "freeModels": "FREE MODELS",
     "contextMax": "MAX CONTEXT WINDOW"
   },
   "tabs": {
@@ -21,7 +21,7 @@
   "providerSearch": {
     "placeholder": "Search provider by name, slug, or capabilities (Groq, OpenRouter, Gemini...)...",
     "all_tiers": "All Cost Tiers",
-    "free_tier_only": "100% Free Tier Providers Only",
+    "free_tier_only": "Free Tier Providers Only",
     "freemium_tier": "Freemium Providers (Has Free Tier)",
     "sort_by": "Sort Providers",
     "sort_models_desc": "Most Models First",
@@ -32,7 +32,7 @@
   "modelSearch": {
     "placeholder": "Search model name, API ID (e.g., llama-3.3, gemini-2.0, deepseek-r1)...",
     "all_categories": "All Model Categories",
-    "free_only": "Zero-Cost Models Only",
+    "free_only": "Free Models Only",
     "multimodal_only": "Multimodal Only (Vision/Audio)",
     "sort_by": "Sort Models",
     "sort_context_desc": "Context Window (Descending)",
@@ -89,7 +89,7 @@
     "details": "Details"
   },
   "detail": {
-    "back": "Back to Leaderboard",
+    "back": "Back to Providers",
     "back_provider": "Back to Provider",
     "access_api": "Access Model API",
     "context_window": "Context Window",

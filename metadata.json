@@ -1,6 +1,6 @@
 {
   "name": "Zero LLM",
-  "description": "Realtime directory and leaderboard of free LLM providers and models",
+  "description": "Realtime directory of providers offering free LLM models, updated continuously by Google Gemini Flash",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

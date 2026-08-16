@@ -19,7 +19,7 @@ import {
   CartesianGrid,
 } from 'recharts';
 import type { FlatModel, ProviderWithModels } from '@/lib/types';
-import { formatContextWindow } from '@/lib/utils';
+import { formatContextWindow, getModelCategoryInfo } from '@/lib/utils';
 import { useLocale } from '../LocaleProvider';
 import { useTheme } from '../ThemeProvider';
 import { BarChart3, PieChart, LineChart as LineChartIcon, AreaChart as AreaChartIcon, Sparkles } from 'lucide-react';
@@ -86,33 +86,22 @@ export function ChartsSection({ models, providers }: ChartsProps) {
       popularity: Math.min(100, Math.round(((m.context_window || 32000) / 2000000) * 100) + 40),
     }));
 
-  // 3. Category Pie/Donut Chart with 6 types (Text, Vision, Audio, Video, Speech, Other)
-  const typeCounts = {
+  // 3. Category Pie/Donut Chart with 5 popular types (Text, Vision, Audio, Video, Speech)
+  const typeCounts: Record<string, number> = {
     Text: 0,
     Vision: 0,
     Audio: 0,
     Video: 0,
     Speech: 0,
-    Other: 0,
   };
 
   if (models && models.length > 0) {
     models.forEach((m) => {
-      const cat = (m.category || '').toLowerCase();
-      const name = (m.name || '').toLowerCase();
-
-      if (cat.includes('speech') || cat.includes('tts') || cat.includes('voice') || name.includes('tts') || name.includes('elevenlabs')) {
-        typeCounts.Speech++;
-      } else if (cat.includes('audio') || name.includes('whisper') || name.includes('music') || name.includes('bark') || name.includes('audio')) {
-        typeCounts.Audio++;
-      } else if (cat.includes('video') || name.includes('sora') || name.includes('runway') || name.includes('pika') || name.includes('video')) {
-        typeCounts.Video++;
-      } else if (m.multimodal || cat.includes('vision') || cat.includes('image') || cat.includes('multimodal') || name.includes('vision') || name.includes('vl') || name.includes('pixtral') || name.includes('llava')) {
-        typeCounts.Vision++;
-      } else if (cat.includes('general') || cat.includes('reasoning') || cat.includes('fast') || cat.includes('small') || cat.includes('code') || name.includes('llama') || name.includes('deepseek') || name.includes('qwen') || name.includes('gemma') || name.includes('mistral') || name.includes('gemini') || name.includes('claude')) {
-        typeCounts.Text++;
+      const info = getModelCategoryInfo(m);
+      if (typeCounts[info.key] !== undefined) {
+        typeCounts[info.key]++;
       } else {
-        typeCounts.Other++;
+        typeCounts.Text++;
       }
     });
   } else {
@@ -121,7 +110,6 @@ export function ChartsSection({ models, providers }: ChartsProps) {
     typeCounts.Audio = 10;
     typeCounts.Video = 5;
     typeCounts.Speech = 8;
-    typeCounts.Other = 6;
   }
 
   const categoryLabelMap: Record<string, string> = {
@@ -130,7 +118,6 @@ export function ChartsSection({ models, providers }: ChartsProps) {
     Audio: t('charts.types.audio'),
     Video: t('charts.types.video'),
     Speech: t('charts.types.speech'),
-    Other: t('charts.types.other'),
   };
 
   const totalModelsCount = models && models.length > 0

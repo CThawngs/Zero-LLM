@@ -143,13 +143,13 @@ export default function HomePage() {
       <section className="text-center space-y-3 py-4 max-w-3xl mx-auto">
         <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-slate-100 leading-tight">
           {locale === 'vi'
-            ? 'Bảng xếp hạng LLM Provider miễn phí — realtime'
-            : 'Free LLM Provider Leaderboard — Realtime'}
+            ? 'Tổng hợp các Provider có Free LLM Model — Cập nhật Realtime'
+            : 'Free LLM Providers Directory — Realtime'}
         </h1>
         <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
           {locale === 'vi'
-            ? 'Theo dõi, so sánh và khám phá các nhà cung cấp mô hình ngôn ngữ lớn miễn phí tốt nhất hiện nay. Cập nhật liên tục từ cộng đồng.'
-            : 'Track, compare, and discover the best zero-cost Large Language Model providers available today. Continuously updated by the community.'}
+            ? 'Thư viện tổng hợp toàn bộ các nhà cung cấp (Providers) có mô hình AI/LLM miễn phí trên thị trường. Dữ liệu được quét và cập nhật liên tục theo thời gian thực từ model Google Gemini mới nhất (Gemini-3.7-Flash).'
+            : 'Comprehensive directory aggregating AI providers that offer free LLM models on the market, continuously indexed and updated in real-time by Google\'s latest Gemini Flash model (Gemini-3.7-Flash).'}
         </p>
       </section>
 

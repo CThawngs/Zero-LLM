@@ -109,14 +109,6 @@ export function ControlsSection({
       badge: 'SPEECH',
       badgeColor: 'bg-amber-500/15 text-amber-600 border-amber-500/30',
     },
-    {
-      value: 'other',
-      label: locale === 'vi' ? 'Other (Khác)' : 'Other',
-      description: locale === 'vi' ? 'Các mô hình AI chuyên dụng khác' : 'Other specialized models',
-      icon: <Layers className="w-3.5 h-3.5 text-slate-500" />,
-      badge: 'OTHER',
-      badgeColor: 'bg-slate-500/15 text-slate-600 border-slate-500/30',
-    },
   ];
 
   // Provider Filter Combobox Options
@@ -135,11 +127,9 @@ export function ControlsSection({
     },
     {
       value: 'free',
-      label: locale === 'vi' ? 'Chỉ 100% Free Providers' : '100% Free Providers Only',
-      description: locale === 'vi' ? 'Provider không tốn phí 0 đồng' : 'Zero-cost inference providers',
-      icon: <Zap className="w-3.5 h-3.5 text-emerald-500" />,
-      badge: 'FREE',
-      badgeColor: 'bg-emerald-500/15 text-emerald-600 border-emerald-500/30',
+      label: locale === 'vi' ? 'Chỉ Free Providers' : 'Free Providers Only',
+      description: locale === 'vi' ? 'Provider có gói free 0 đồng' : 'Free tier inference providers',
+      icon: <Layers className="w-3.5 h-3.5 text-emerald-500" />,
     },
     {
       value: 'context32k',
@@ -239,11 +229,6 @@ export function ControlsSection({
                       <div className="font-bold text-slate-800 dark:text-slate-200 truncate">{m.name}</div>
                       <div className="text-[10px] text-slate-400 font-mono truncate">{m.apiId}</div>
                     </div>
-                    {m.isFree && (
-                      <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 shrink-0">
-                        FREE
-                      </span>
-                    )}
                   </div>
                 ))}
               </div>

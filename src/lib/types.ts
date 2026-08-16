@@ -65,6 +65,7 @@ export interface FlatModel {
   category: string | null;
   popularity_score: number;
   status: string;
+  discovered_via?: string | null;
   verified_at?: string | null;
   created_at?: string | null;
   last_checked_at?: string | null;

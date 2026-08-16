@@ -97,7 +97,7 @@ export async function fetchModelsFlat(): Promise<FlatModel[]> {
         id, provider_id, model_api_id, name, context_window, is_free,
         price_input_per_mtok, price_output_per_mtok, external_url,
         rate_limit_per_minute, rate_limit_per_day, multimodal, category,
-        popularity_score, status, verified_at, created_at, last_checked_at,
+        popularity_score, status, discovered_via, verified_at, created_at, last_checked_at,
         providers!inner (id, name, slug, logo_url, is_free)
       `)
       .eq('status', 'active')
@@ -128,6 +128,7 @@ export async function fetchModelsFlat(): Promise<FlatModel[]> {
       category: m.category,
       popularity_score: m.popularity_score,
       status: m.status,
+      discovered_via: m.discovered_via,
       verified_at: m.verified_at,
       created_at: m.created_at,
       last_checked_at: m.last_checked_at,
@@ -161,6 +162,7 @@ function flattenProviders(providers: ProviderWithModels[]): FlatModel[] {
         category: m.category,
         popularity_score: m.popularity_score,
         status: m.status,
+        discovered_via: m.discovered_via,
         verified_at: m.verified_at,
         created_at: m.created_at,
         last_checked_at: m.last_checked_at,

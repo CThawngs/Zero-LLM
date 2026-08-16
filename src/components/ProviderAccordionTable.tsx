@@ -6,7 +6,6 @@ import {
   ChevronUp,
   ChevronRight,
   ExternalLink,
-  Zap,
   ArrowUpDown,
   Layers,
   ChevronsUpDown,
@@ -219,18 +218,7 @@ export function ProviderAccordionTable({ providers }: ProviderAccordionTableProp
                         </span>
                       </div>
 
-                      <div className="shrink-0">
-                        {prov.is_free ? (
-                          <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 uppercase tracking-wider flex items-center gap-1">
-                            <Zap className="w-3 h-3 fill-emerald-500" />
-                            100% Free
-                          </span>
-                        ) : (
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 uppercase tracking-wider">
-                            Freemium
-                          </span>
-                        )}
-                      </div>
+                      <div className="shrink-0" />
                     </div>
 
                     {/* Bottom Row: Stats & Status Badge on Left + Actions on Right */}
@@ -249,11 +237,6 @@ export function ProviderAccordionTable({ providers }: ProviderAccordionTableProp
 
                         <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 bg-white/90 dark:bg-slate-800/90 px-2 py-0.5 rounded-md border border-slate-200/60 dark:border-slate-700/60 shadow-2xs">
                           <strong className="text-indigo-600 dark:text-indigo-400 font-extrabold">{provModels.length}</strong> models
-                          {freeModelCount > 0 && (
-                            <span className="text-emerald-600 dark:text-emerald-400 ml-1 font-bold">
-                              ({freeModelCount} free)
-                            </span>
-                          )}
                         </span>
                       </div>
 
@@ -308,17 +291,6 @@ export function ProviderAccordionTable({ providers }: ProviderAccordionTableProp
                             {prov.name}
                           </span>
 
-                          {prov.is_free ? (
-                            <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 uppercase tracking-wider flex items-center gap-1 shrink-0">
-                              <Zap className="w-3 h-3 fill-emerald-500" />
-                              100% Free
-                            </span>
-                          ) : (
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 uppercase tracking-wider shrink-0">
-                              Freemium
-                            </span>
-                          )}
-
                           {prov.status === 'active' && (
                             <span className="inline-flex items-center gap-1 text-[10px] font-bold text-slate-500 dark:text-slate-400 bg-slate-200/60 dark:bg-slate-800 px-2 py-0.5 rounded-full shrink-0">
                               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
@@ -336,11 +308,6 @@ export function ProviderAccordionTable({ providers }: ProviderAccordionTableProp
                     >
                       <div className="text-xs font-bold text-slate-600 dark:text-slate-300 bg-white/80 dark:bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-200/60 dark:border-slate-700/60 shadow-2xs">
                         <span className="text-indigo-600 dark:text-indigo-400 font-extrabold">{provModels.length}</span> models
-                        {freeModelCount > 0 && (
-                          <span className="text-emerald-600 dark:text-emerald-400 ml-1.5 font-bold">
-                            • {freeModelCount} free
-                          </span>
-                        )}
                       </div>
 
                       {(prov.website || prov.signup_url) && (
@@ -381,25 +348,13 @@ export function ProviderAccordionTable({ providers }: ProviderAccordionTableProp
                         >
                           {/* MOBILE CARD VIEW (< md): 1 SINGLE MODEL NAME + CONTEXT WINDOW PROGRESS BAR */}
                           <div className="md:hidden space-y-2.5">
-                            {/* Row 1: Single Model Name + Copy Button + Free/Paid Badge */}
+                            {/* Row 1: Single Model Name + Copy Button */}
                             <div className="flex items-start justify-between gap-2">
                               <div className="flex items-center gap-2 flex-wrap min-w-0 flex-1">
                                 <span className="font-extrabold text-sm text-slate-900 dark:text-slate-100 break-words leading-tight">
                                   {modelName}
                                 </span>
                                 <CopyModelButton textToCopy={copyValue} />
-                              </div>
-
-                              <div className="shrink-0">
-                                {mod.is_free ? (
-                                  <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 tracking-wider">
-                                    0$ FREE
-                                  </span>
-                                ) : (
-                                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
-                                    PAID
-                                  </span>
-                                )}
                               </div>
                             </div>
 
@@ -449,11 +404,6 @@ export function ProviderAccordionTable({ providers }: ProviderAccordionTableProp
                                   {modelName}
                                 </span>
                                 <CopyModelButton textToCopy={copyValue} />
-                                {mod.is_free && (
-                                  <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 tracking-wider shrink-0">
-                                    0$ FREE
-                                  </span>
-                                )}
                               </div>
                             </div>
 

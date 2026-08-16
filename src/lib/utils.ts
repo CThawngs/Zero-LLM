@@ -54,7 +54,7 @@ export function getProviderColor(name: string): string {
   return colors[index];
 }
 
-export type ModelCategoryKey = 'Text' | 'Vision' | 'Audio' | 'Speech' | 'Video' | 'Other';
+export type ModelCategoryKey = 'Text' | 'Vision' | 'Audio' | 'Speech' | 'Video';
 
 export interface ModelCategoryInfo {
   key: ModelCategoryKey;
@@ -72,8 +72,14 @@ export function getModelCategoryInfo(model: {
   const cat = (model.category || '').toLowerCase();
   const name = (model.name || '').toLowerCase();
   const apiId = (model.model_api_id || '').toLowerCase();
+  const fullText = `${cat} ${name} ${apiId}`;
 
-  if (cat.includes('speech') || cat.includes('tts') || cat.includes('voice') || name.includes('tts') || name.includes('elevenlabs') || apiId.includes('tts')) {
+  // 1. SPEECH (Text-to-Speech / Voice Synthesis)
+  if (
+    /\b(tts|text-to-speech|voice|speech-synthesis|elevenlabs|xtts|vits|piper|chattts|cosyvoice|kokoro)\b/i.test(fullText) ||
+    cat.includes('speech') ||
+    cat.includes('tts')
+  ) {
     return {
       key: 'Speech',
       labelEn: 'Speech',
@@ -81,7 +87,13 @@ export function getModelCategoryInfo(model: {
       badgeClass: 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30',
     };
   }
-  if (cat.includes('audio') || name.includes('whisper') || name.includes('music') || name.includes('bark') || name.includes('audio') || apiId.includes('whisper')) {
+
+  // 2. AUDIO (Audio / Speech-to-Text / Music / Sound)
+  if (
+    /\b(whisper|audio|music|sound|bark|sensevoice|funasr|seamless|melo|asr|speech-to-text)\b/i.test(fullText) ||
+    cat.includes('audio') ||
+    cat.includes('asr')
+  ) {
     return {
       key: 'Audio',
       labelEn: 'Audio',
@@ -89,7 +101,12 @@ export function getModelCategoryInfo(model: {
       badgeClass: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30',
     };
   }
-  if (cat.includes('video') || name.includes('sora') || name.includes('runway') || name.includes('pika') || name.includes('video') || apiId.includes('video')) {
+
+  // 3. VIDEO (Video Generation / Understanding)
+  if (
+    /\b(video|sora|runway|pika|kling|cogvideo|animatediff|ltx|hunyuanvideo)\b/i.test(fullText) ||
+    cat.includes('video')
+  ) {
     return {
       key: 'Video',
       labelEn: 'Video',
@@ -97,7 +114,26 @@ export function getModelCategoryInfo(model: {
       badgeClass: 'bg-pink-500/15 text-pink-700 dark:text-pink-300 border-pink-500/30',
     };
   }
-  if (model.multimodal || cat.includes('vision') || cat.includes('image') || cat.includes('multimodal') || name.includes('vision') || name.includes('vl') || name.includes('pixtral') || name.includes('llava') || apiId.includes('vision') || apiId.includes('vl')) {
+
+  // 4. VISION (Multimodal / Vision / Image understanding)
+  // Must be genuinely vision-capable models (e.g. Vision Instruct, VL, Pixtral, LLaVA, GPT-4o, Gemini Flash/Pro, Claude 3, etc.)
+  const isVisionKeyword =
+    /\b(vision|pixtral|llava|internvl|qwen-vl|qwen2-vl|qwen2.5-vl|minicpm-v|florence|bakllava|moondream|clip|ocr|image-to-text)\b/i.test(fullText) ||
+    /-vl\b/i.test(apiId) ||
+    /-vl-/i.test(apiId) ||
+    /\bvision\b/i.test(name) ||
+    /\bvision\b/i.test(apiId);
+
+  const isKnownMultimodalFamily =
+    /gpt-4o|gpt-4-turbo|gemini-1\.5|gemini-2\.0|gemini-2\.5|gemini-3\.|claude-3/i.test(apiId) ||
+    /gpt-4o|gpt-4-turbo|gemini 1\.5|gemini 2\.0|gemini 2\.5|gemini 3\.|claude 3/i.test(name);
+
+  // If text-only indicators are present (e.g. DeepSeek R1, Llama 3.3 text, Qwen Coder, Gemma, Mistral Nemo), prioritize Text
+  const isExplicitlyTextOnly =
+    /\b(coder|code|deepseek-r1|deepseek-v3|llama-3\.3|llama-3\.1|llama-3-8b|llama-3-70b|gemma-2|mistral-nemo|mistral-small|mistral-large|codestral|starcoder|math|reasoning|instruct)\b/i.test(apiId) &&
+    !isVisionKeyword;
+
+  if (!isExplicitlyTextOnly && (isVisionKeyword || (model.multimodal && (cat.includes('vision') || cat.includes('multimodal') || isKnownMultimodalFamily)))) {
     return {
       key: 'Vision',
       labelEn: 'Vision',
@@ -105,20 +141,13 @@ export function getModelCategoryInfo(model: {
       badgeClass: 'bg-cyan-500/15 text-cyan-700 dark:text-cyan-300 border-cyan-500/30',
     };
   }
-  if (cat.includes('text') || cat.includes('general') || cat.includes('reasoning') || cat.includes('fast') || cat.includes('small') || cat.includes('code') || name.includes('llama') || name.includes('deepseek') || name.includes('qwen') || name.includes('gemma') || name.includes('mistral') || name.includes('gemini') || name.includes('claude')) {
-    return {
-      key: 'Text',
-      labelEn: 'Text',
-      labelVi: 'Text (Văn bản)',
-      badgeClass: 'bg-purple-500/15 text-purple-700 dark:text-purple-300 border-purple-500/30',
-    };
-  }
 
+  // 5. TEXT (Default for all LLMs: Chat, Reasoning, Code, Math, Instruction, General)
   return {
-    key: 'Other',
-    labelEn: 'Other',
-    labelVi: 'Other (Khác)',
-    badgeClass: 'bg-slate-500/15 text-slate-700 dark:text-slate-300 border-slate-500/30',
+    key: 'Text',
+    labelEn: 'Text',
+    labelVi: 'Text (Văn bản)',
+    badgeClass: 'bg-purple-500/15 text-purple-700 dark:text-purple-300 border-purple-500/30',
   };
 }
 

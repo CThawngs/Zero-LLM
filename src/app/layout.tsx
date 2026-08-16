@@ -9,9 +9,9 @@ import { ScrollToTop } from '@/components/ScrollToTop';
 import { AnalyticsTracker } from '@/components/AnalyticsTracker';
 
 export const metadata: Metadata = {
-  title: 'Zero LLM — Free LLM Providers & Models Realtime Leaderboard',
-  description: 'Continuous real-time indexing of zero-cost LLM API providers, ultra-fast inference LPUs, and large-context open models.',
-  keywords: ['LLM', 'Free LLM API', 'Groq', 'OpenRouter', 'Google AI Studio', 'DeepSeek', 'Llama 3.3'],
+  title: 'Zero LLM — Free LLM Providers & Models Realtime Directory (Updated by Gemini Flash)',
+  description: 'Comprehensive directory aggregating AI providers offering free LLM models on the market, updated in real time by Google Gemini Flash.',
+  keywords: ['LLM', 'Free LLM API', 'Free LLM Providers', 'Groq', 'OpenRouter', 'Google AI Studio', 'DeepSeek', 'Llama 3.3', 'Gemini Flash'],
 };
 
 export default function RootLayout({
