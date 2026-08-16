@@ -82,6 +82,43 @@ function getProviderVectorLogo(name: string) {
     );
   }
 
+  if (lower.includes('orcarouter') || lower.includes('orca')) {
+    return (
+      <svg viewBox="0 0 24 24" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="6" fill="#0EA5E9" />
+        <path
+          d="M5 15C7 11 12 8 19 9C17 13 13 17 8 18C6.5 18 5.5 17 5 15Z"
+          fill="white"
+        />
+        <path
+          d="M12 9C13.5 6 16 5 18 5C17.5 7 16.5 8.5 15 9.5"
+          stroke="white"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+        <circle cx="8" cy="14" r="1.2" fill="#0EA5E9" />
+        <circle cx="15" cy="13" r="1" fill="#38BDF8" />
+        <circle cx="18" cy="11" r="1" fill="#38BDF8" />
+      </svg>
+    );
+  }
+
+  if (lower.includes('xkiro') || lower.includes('kiro')) {
+    return (
+      <svg viewBox="0 0 24 24" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="6" fill="#6366F1" />
+        <path
+          d="M6 6L11 12L6 18M18 6L13 12L18 18"
+          stroke="white"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <circle cx="12" cy="12" r="2" fill="#34D399" />
+      </svg>
+    );
+  }
+
   if (lower.includes('nvidia')) {
     return (
       <svg viewBox="0 0 24 24" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">

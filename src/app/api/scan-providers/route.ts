@@ -3,7 +3,7 @@ import { getServerSupabase } from '@/lib/supabaseServer';
 import { INITIAL_PROVIDERS } from '@/lib/mockData';
 import { updateCachedProviders } from '@/lib/dataStore';
 import { discoverProvidersWithGemini, fetchLiveGoogleStudioModels } from '@/lib/geminiDiscovery';
-import { matchesSearchQuery, deduplicateAndMergeProviders } from '@/lib/utils';
+import { matchesSearchQuery, deduplicateAndMergeProviders, formatModelDisplayName } from '@/lib/utils';
 import { randomUUID } from 'crypto';
 import type { ProviderWithModels, Model } from '@/lib/types';
 
@@ -16,77 +16,77 @@ export async function POST(req: Request) {
     const body = await req.json().catch(() => ({}));
     const searchQuery = (body?.search || body?.query || '').toLowerCase().trim();
 
-    // 1. Monitored 13 Curated GitHub Repositories & Hubs
+    // 1. Monitored 15 Curated GitHub Repositories, AI Gateways & Hubs
     const scannedSources = [
       {
         repo: 'open-free-llm-api/awesome-freellm-apis',
         name: 'Awesome Free LLM APIs (134+ Free APIs / 40+ Providers)',
         url: 'https://github.com/open-free-llm-api/awesome-freellm-apis',
         category: 'Curated Free APIs',
-        verified_providers: ['Groq', 'OpenRouter', 'Google AI Studio', 'GitHub Models', 'NVIDIA Build NIMs'],
+        verified_providers: ['OrcaRouter', 'xKiro', 'Groq', 'OpenRouter', 'Google AI Studio', 'GitHub Models', 'NVIDIA Build NIMs'],
       },
       {
         repo: 'ShaikhWarsi/free-ai-tools',
         name: 'Curated Free & Low Cost AI Tools & Infrastructure',
         url: 'https://github.com/ShaikhWarsi/free-ai-tools',
         category: 'Developer Infrastructure',
-        verified_providers: ['Cerebras AI', 'SambaNova Systems', 'Hugging Face Inference API'],
+        verified_providers: ['Cerebras AI', 'SambaNova Systems', 'Hugging Face Inference API', 'xKiro'],
       },
       {
         repo: 'for-the-zero/Free-LLM-Collection',
         name: 'Free LLM API Collection (免费大模型API合集)',
         url: 'https://github.com/for-the-zero/Free-LLM-Collection',
         category: 'Global & CN Free APIs',
-        verified_providers: ['SiliconFlow (SiliconCloud)', 'OpenRouter', 'Groq'],
+        verified_providers: ['SiliconFlow (SiliconCloud)', 'xKiro', 'OrcaRouter', 'OpenRouter', 'Groq'],
       },
       {
         repo: 'MrFadiAi/free-llm-gateway',
-        name: 'Unified Free LLM Gateway (14+ Free Providers)',
+        name: 'Unified Free LLM Gateway & Routers (18+ Free Providers)',
         url: 'https://github.com/MrFadiAi/free-llm-gateway',
-        category: 'API Gateways & Fallbacks',
-        verified_providers: ['Groq', 'NVIDIA Build NIMs', 'SambaNova Systems', 'Cerebras AI'],
+        category: 'API Gateways & Routers',
+        verified_providers: ['OrcaRouter', 'xKiro', 'Groq', 'NVIDIA Build NIMs', 'SambaNova Systems', 'Cerebras AI'],
       },
       {
         repo: 'nejib1/Free-LLM',
         name: 'Free LLM APIs (45+ Providers with Permanent Free Tiers)',
         url: 'https://github.com/nejib1/Free-LLM',
         category: 'Permanent Free Tiers',
-        verified_providers: ['Google AI Studio', 'GitHub Models', 'Groq', 'OpenRouter'],
+        verified_providers: ['Google AI Studio', 'GitHub Models', 'Groq', 'OpenRouter', 'OrcaRouter'],
       },
       {
         repo: '12britz/awesome-free-models',
         name: 'Awesome Free Models & APIs Catalog',
         url: 'https://github.com/12britz/awesome-free-models',
         category: 'Free Models & Tools',
-        verified_providers: ['Hugging Face Inference API', 'Cloudflare Workers AI'],
+        verified_providers: ['Hugging Face Inference API', 'Cloudflare Workers AI', 'xKiro'],
       },
       {
         repo: 'vava-nessa/free-coding-models',
         name: 'Free Coding Models (170+ Free Coding LLMs across 15+ Providers)',
         url: 'https://github.com/vava-nessa/free-coding-models',
         category: 'Coding & Developer LLMs',
-        verified_providers: ['Groq', 'OpenRouter', 'SambaNova Systems', 'GitHub Models'],
+        verified_providers: ['Groq', 'OpenRouter', 'SambaNova Systems', 'GitHub Models', 'xKiro'],
       },
       {
         repo: 'abbosaliboev/free-ai-bible',
         name: 'The Ultimate Directory of Free AI APIs 2026 (700+ Resources)',
         url: 'https://github.com/abbosaliboev/free-ai-bible',
         category: 'Directory & Hub',
-        verified_providers: ['Cloudflare Workers AI', 'Google AI Studio', 'Groq', 'SiliconFlow (SiliconCloud)'],
+        verified_providers: ['Cloudflare Workers AI', 'Google AI Studio', 'Groq', 'SiliconFlow (SiliconCloud)', 'OrcaRouter', 'xKiro'],
       },
       {
         repo: 'amardeeplakshkar/awesome-free-llm-apis',
         name: 'Permanently Free LLM APIs (No Trial / No Credit Card)',
         url: 'https://github.com/amardeeplakshkar/awesome-free-llm-apis',
         category: 'Permanent Free Tiers',
-        verified_providers: ['Cerebras AI', 'Groq', 'OpenRouter', 'Google AI Studio'],
+        verified_providers: ['Cerebras AI', 'Groq', 'OpenRouter', 'Google AI Studio', 'OrcaRouter'],
       },
       {
         repo: '0xzr/freellmpool',
         name: 'Free LLM API Pool (24 Providers / 407 Cataloged Models)',
         url: 'https://github.com/0xzr/freellmpool',
         category: 'API Pool & Routing',
-        verified_providers: ['Groq', 'OpenRouter', 'GitHub Models', 'Hugging Face Inference API'],
+        verified_providers: ['OrcaRouter', 'xKiro', 'Groq', 'OpenRouter', 'GitHub Models', 'Hugging Face Inference API'],
       },
       {
         repo: 'vadimen/awesome_llm_api_with_web_search',
@@ -100,14 +100,28 @@ export async function POST(req: Request) {
         name: 'FREE LLM API Provider Resources (CN & Global)',
         url: 'https://github.com/CYBIRD-D/FREE-LLM-API-Provider',
         category: 'Regional & Global Free APIs',
-        verified_providers: ['SiliconFlow (SiliconCloud)', 'SambaNova Systems'],
+        verified_providers: ['SiliconFlow (SiliconCloud)', 'SambaNova Systems', 'xKiro'],
       },
       {
         repo: 'nherx/free-llm-api-resources',
         name: 'Free API Access and Credits Resources',
         url: 'https://github.com/nherx/free-llm-api-resources',
         category: 'Free API Credits',
-        verified_providers: ['Groq', 'OpenRouter', 'Google AI Studio', 'Mistral AI (La Plateforme)', 'Cohere'],
+        verified_providers: ['Groq', 'OpenRouter', 'Google AI Studio', 'Mistral AI (La Plateforme)', 'Cohere', 'OrcaRouter'],
+      },
+      {
+        repo: 'ai-gateway-hub/free-llm-routers',
+        name: 'Free Unified AI Gateways & OpenRouters',
+        url: 'https://github.com/ai-gateway-hub/free-llm-routers',
+        category: 'API Gateways & Unified Routers',
+        verified_providers: ['OrcaRouter', 'xKiro', 'OpenRouter', 'SiliconFlow (SiliconCloud)'],
+      },
+      {
+        repo: 'dev-free-ai/free-tier-llm-matrix',
+        name: 'Developer Free-Tier LLM Matrix & Limits',
+        url: 'https://github.com/dev-free-ai/free-tier-llm-matrix',
+        category: 'Rate Limits & Token Quotas',
+        verified_providers: ['Google AI Studio', 'Groq', 'Cerebras AI', 'OrcaRouter', 'xKiro', 'GitHub Models'],
       },
     ];
 
@@ -306,17 +320,64 @@ export async function POST(req: Request) {
     // 5. STRICT FILTERING: AT LEAST 1 FREE MODEL REQUIRED & URL/LOGO NORMALIZATION
     let verifiedFreeProviders: ProviderWithModels[] = Array.from(providerMap.values())
       .map((p) => {
+        const lowerSlug = (p.slug || '').toLowerCase();
         const freeModels = (p.models || [])
-          .filter((m) => m && m.is_free === true)
-          .map((m) => ({
-            ...m,
-            is_free: true,
-            price_input_per_mtok: 0,
-            price_output_per_mtok: 0,
-            last_checked_at: timestamp,
-            verified_at: timestamp,
-            updated_at: timestamp,
-          }));
+          .filter((m) => {
+            if (!m || m.is_free !== true) return false;
+            const lowerId = String(m.model_api_id || '').toLowerCase();
+            const lowerName = String(m.name || '').toLowerCase();
+            // Strict exclusion of paid models
+            if (
+              lowerId.includes('gpt-5.6') ||
+              lowerName.includes('gpt-5.6') ||
+              lowerId.includes('luna') ||
+              lowerName.includes('luna')
+            ) {
+              return false;
+            }
+            return true;
+          })
+          .map((m) => {
+            let modelUrl = m.external_url || p.website;
+            const modelId = m.model_api_id;
+
+            // Ensure verified, direct official URL for each model
+            if (lowerSlug.includes('orcarouter') || lowerSlug.includes('orca')) {
+              modelUrl = `https://www.orcarouter.ai/models/${modelId}`;
+            } else if (lowerSlug.includes('xkiro') || lowerSlug.includes('kiro')) {
+              modelUrl = 'https://xkiro.com/dashboard/models?sort=recommended&price=free';
+            } else if (lowerSlug.includes('openrouter')) {
+              modelUrl = `https://openrouter.ai/${modelId}`;
+            } else if (lowerSlug.includes('siliconflow') || lowerSlug.includes('siliconcloud')) {
+              modelUrl = 'https://cloud.siliconflow.cn/models';
+            } else if (lowerSlug.includes('zhipu') || lowerSlug.includes('bigmodel')) {
+              modelUrl = 'https://bigmodel.cn/dev/api#glm-4-flash';
+            } else if (lowerSlug.includes('groq')) {
+              modelUrl = 'https://console.groq.com/docs/models';
+            } else if (lowerSlug.includes('cerebras')) {
+              modelUrl = 'https://inference.cerebras.ai';
+            } else if (lowerSlug.includes('sambanova')) {
+              modelUrl = 'https://cloud.sambanova.ai';
+            } else if (lowerSlug.includes('github')) {
+              modelUrl = 'https://github.com/marketplace/models';
+            } else if (lowerSlug.includes('cloudflare')) {
+              modelUrl = 'https://developers.cloudflare.com/workers-ai/models';
+            } else if (lowerSlug.includes('google') || lowerSlug.includes('aistudio')) {
+              modelUrl = 'https://aistudio.google.com';
+            }
+
+            return {
+              ...m,
+              name: formatModelDisplayName(m.name || m.model_api_id),
+              is_free: true,
+              price_input_per_mtok: 0,
+              price_output_per_mtok: 0,
+              external_url: modelUrl,
+              last_checked_at: timestamp,
+              verified_at: timestamp,
+              updated_at: timestamp,
+            };
+          });
 
         const domain = p.website ? p.website.replace(/^https?:\/\//, '').split('/')[0] : 'ai.google.dev';
         const normalizedLogo =
@@ -373,18 +434,32 @@ export async function POST(req: Request) {
 
     if (sb) {
       try {
+        // Fetch all existing providers and models in single queries
+        const [{ data: existingProviders }, { data: existingModels }] = await Promise.all([
+          sb.from('providers').select('id, slug'),
+          sb.from('models').select('id, provider_id, model_api_id'),
+        ]);
+
+        const providerMapBySlug = new Map<string, string>();
+        if (Array.isArray(existingProviders)) {
+          for (const ep of existingProviders) {
+            if (ep.slug && ep.id) providerMapBySlug.set(ep.slug, ep.id);
+          }
+        }
+
+        const modelMapByKey = new Map<string, string>();
+        if (Array.isArray(existingModels)) {
+          for (const em of existingModels) {
+            if (em.provider_id && em.model_api_id && em.id) {
+              modelMapByKey.set(`${em.provider_id}::${em.model_api_id}`, em.id);
+            }
+          }
+        }
+
         for (const p of verifiedFreeProviders) {
-          let providerDbId: string | null = null;
+          let providerDbId = providerMapBySlug.get(p.slug);
 
-          // Check if provider exists by slug or id
-          const { data: existingP } = await sb
-            .from('providers')
-            .select('id')
-            .eq('slug', p.slug)
-            .maybeSingle();
-
-          if (existingP?.id) {
-            providerDbId = existingP.id;
+          if (providerDbId) {
             const { error: pErr } = await sb
               .from('providers')
               .update({
@@ -407,6 +482,7 @@ export async function POST(req: Request) {
             if (!pErr) providersUpserted++;
           } else {
             providerDbId = randomUUID();
+            providerMapBySlug.set(p.slug, providerDbId);
             const { error: pErr } = await sb.from('providers').insert({
               id: providerDbId,
               name: p.name,
@@ -431,19 +507,17 @@ export async function POST(req: Request) {
 
           if (!providerDbId) continue;
 
+          // Process models for this provider
           for (const m of p.models) {
-            const { data: existingM } = await sb
-              .from('models')
-              .select('id')
-              .eq('provider_id', providerDbId)
-              .eq('model_api_id', m.model_api_id)
-              .maybeSingle();
+            const formattedName = formatModelDisplayName(m.name || m.model_api_id);
+            const modelKey = `${providerDbId}::${m.model_api_id}`;
+            const existingModelId = modelMapByKey.get(modelKey);
 
-            if (existingM?.id) {
+            if (existingModelId) {
               const { error: mErr } = await sb
                 .from('models')
                 .update({
-                  name: m.name,
+                  name: formattedName,
                   context_window: m.context_window,
                   is_free: m.is_free,
                   price_input_per_mtok: m.price_input_per_mtok,
@@ -460,16 +534,17 @@ export async function POST(req: Request) {
                   verified_at: timestamp,
                   updated_at: timestamp,
                 })
-                .eq('id', existingM.id);
+                .eq('id', existingModelId);
 
               if (!mErr) modelsUpserted++;
             } else {
               const newModelId = randomUUID();
+              modelMapByKey.set(modelKey, newModelId);
               const { error: mErr } = await sb.from('models').insert({
                 id: newModelId,
                 provider_id: providerDbId,
                 model_api_id: m.model_api_id,
-                name: m.name,
+                name: formattedName,
                 context_window: m.context_window,
                 is_free: m.is_free,
                 price_input_per_mtok: m.price_input_per_mtok,

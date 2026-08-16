@@ -2,7 +2,7 @@ import { getBrowserSupabase } from '@/lib/supabase';
 import type { ProviderWithModels, FlatModel, FilterState, Model } from '@/lib/types';
 import { INITIAL_PROVIDERS } from '@/lib/mockData';
 import { getCachedProviders } from '@/lib/dataStore';
-import { matchesSearchQuery, deduplicateAndMergeProviders } from '@/lib/utils';
+import { matchesSearchQuery, deduplicateAndMergeProviders, formatModelDisplayName } from '@/lib/utils';
 
 export async function fetchProvidersWithModels(): Promise<ProviderWithModels[]> {
   const sb = getBrowserSupabase();
@@ -55,7 +55,10 @@ export async function fetchProvidersWithModels(): Promise<ProviderWithModels[]> 
     const modelsByProvider = new Map<string, Model[]>();
     for (const m of models ?? []) {
       const arr = modelsByProvider.get(m.provider_id) ?? [];
-      arr.push(m);
+      arr.push({
+        ...m,
+        name: formatModelDisplayName(m.name || m.model_api_id),
+      });
       modelsByProvider.set(m.provider_id, arr);
     }
 
@@ -116,7 +119,7 @@ export async function fetchModelsFlat(): Promise<FlatModel[]> {
       provider_logo_url: m.providers.logo_url,
       provider_is_free: m.providers.is_free,
       model_api_id: m.model_api_id,
-      name: m.name,
+      name: formatModelDisplayName(m.name || m.model_api_id),
       context_window: m.context_window,
       is_free: m.is_free,
       price_input_per_mtok: m.price_input_per_mtok,
@@ -150,7 +153,7 @@ function flattenProviders(providers: ProviderWithModels[]): FlatModel[] {
         provider_logo_url: p.logo_url,
         provider_is_free: p.is_free,
         model_api_id: m.model_api_id,
-        name: m.name,
+        name: formatModelDisplayName(m.name || m.model_api_id),
         context_window: m.context_window,
         is_free: m.is_free,
         price_input_per_mtok: m.price_input_per_mtok,

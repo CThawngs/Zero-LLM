@@ -4,7 +4,7 @@ import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { Sparkles, Cpu, Timer } from 'lucide-react';
 import { useLocale } from './LocaleProvider';
 import { ProviderLogo } from './ProviderLogo';
-import { getModelCategoryInfo, formatContextWindow } from '@/lib/utils';
+import { getModelCategoryInfo, formatContextWindow, formatModelDisplayName } from '@/lib/utils';
 import type { ProviderWithModels, FlatModel } from '@/lib/types';
 
 interface NewDiscoveriesProps {
@@ -36,10 +36,17 @@ function formatCountdown(remainingMs: number): string {
 // Initial realistic chronological offsets for seed catalog
 const SEED_CHRONO_OFFSETS: Record<string, number> = {
   // Top tier newest models
-  'mod-gemini-2.5-flash': 5 * 60 * 1000,
-  'mod-gemini-2.5-pro': 18 * 60 * 1000,
-  'mod-groq-2': 32 * 60 * 1000,
-  'mod-or-deepseek-r1-free': 45 * 60 * 1000,
+  'mod-orca-1': 4 * 60 * 1000,
+  'mod-xkiro-1': 8 * 60 * 1000,
+  'mod-xkiro-2': 12 * 60 * 1000,
+  'mod-orca-2': 14 * 60 * 1000,
+  'mod-orca-3': 16 * 60 * 1000,
+  'mod-goog-37-flash': 20 * 60 * 1000,
+  'mod-goog-37-thinking': 25 * 60 * 1000,
+  'mod-gemini-2.5-flash': 30 * 60 * 1000,
+  'mod-gemini-2.5-pro': 35 * 60 * 1000,
+  'mod-groq-2': 42 * 60 * 1000,
+  'mod-or-deepseek-r1-free': 55 * 60 * 1000,
   'mod-cerebras-llama3.3-70b': 75 * 60 * 1000,
   'mod-groq-1': 110 * 60 * 1000,
   'mod-sambanova-qwen2.5-coder-32b': 160 * 60 * 1000,
@@ -50,9 +57,11 @@ const SEED_CHRONO_OFFSETS: Record<string, number> = {
   'mod-siliconflow-deepseek-v3': 750 * 60 * 1000,
 
   // Providers
-  'prov-google-ai': 15 * 60 * 1000,
+  'prov-orcarouter': 8 * 60 * 1000,
+  'prov-xkiro': 12 * 60 * 1000,
+  'prov-google-aistudio': 20 * 60 * 1000,
   'prov-groq': 40 * 60 * 1000,
-  'prov-openrouter': 90 * 60 * 1000,
+  'prov-openrouter': 60 * 60 * 1000,
   'prov-cerebras': 150 * 60 * 1000,
   'prov-sambanova': 220 * 60 * 1000,
   'prov-github-models': 300 * 60 * 1000,
@@ -222,9 +231,11 @@ export function NewDiscoveries({ providers = [], models = [] }: NewDiscoveriesPr
       .sort((a, b) => b.discoveredTime - a.discoveredTime)
       .map(({ model: m, discoveredTime, remainingMs }) => {
         const categoryInfo = getModelCategoryInfo(m);
+        const rawName = m.name || m.model_api_id;
+        const formattedName = formatModelDisplayName(rawName);
         return {
           id: m.id,
-          name: m.name || m.model_api_id,
+          name: formattedName,
           providerName: m.provider_name || 'Provider',
           providerLogo: m.provider_logo_url,
           contextWindow: formatContextWindow(m.context_window),

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import type { Model, ProviderWithModels } from '@/lib/types';
 import { ProviderLogo } from './ProviderLogo';
 import { useLocale } from './LocaleProvider';
-import { formatContextWindow, formatNumber, getModelCategoryInfo } from '@/lib/utils';
+import { formatContextWindow, formatNumber, getModelCategoryInfo, formatModelDisplayName } from '@/lib/utils';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
 import { trackPageView } from '@/lib/track';
 import { CopyModelButton } from './CopyModelButton';
@@ -21,6 +21,8 @@ export function ModelDetail({ model, provider }: ModelDetailProps) {
   useEffect(() => {
     trackPageView();
   }, []);
+
+  const formattedName = formatModelDisplayName(model.name || model.model_api_id);
 
   return (
     <div className="space-y-10">
@@ -38,7 +40,7 @@ export function ModelDetail({ model, provider }: ModelDetailProps) {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
             <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-slate-100">
-              {model.name}
+              {formattedName}
             </h1>
             <div className="flex items-center gap-2 mt-2">
               <div className="text-sm font-mono text-amber-600 dark:text-amber-400 font-bold border-l-2 border-amber-500 pl-3 py-0.5">

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import type { FlatModel } from '@/lib/types';
 import { useLocale } from './LocaleProvider';
-import { formatContextWindow, getModelCategoryInfo } from '@/lib/utils';
+import { formatContextWindow, getModelCategoryInfo, formatModelDisplayName } from '@/lib/utils';
 import { ExternalLink, Sparkles } from 'lucide-react';
 import { ProviderLogo } from './ProviderLogo';
 import { CopyModelButton } from './CopyModelButton';
@@ -35,8 +35,9 @@ export function ModelTable({ models, showProviderColumn = true }: ModelTableProp
       <div className="md:hidden space-y-2.5">
         {visibleModels.map((m) => {
           const categoryInfo = getModelCategoryInfo(m);
-          const modelName = m.name || m.model_api_id;
-          const copyValue = m.model_api_id || m.name;
+          const rawName = m.name || m.model_api_id;
+          const modelName = formatModelDisplayName(rawName);
+          const copyValue = m.model_api_id || modelName;
 
           return (
             <div
@@ -120,8 +121,9 @@ export function ModelTable({ models, showProviderColumn = true }: ModelTableProp
           <tbody className="divide-y divide-slate-200/80 dark:divide-slate-800/80 text-xs sm:text-sm font-medium">
             {visibleModels.map((m) => {
               const categoryInfo = getModelCategoryInfo(m);
-              const modelName = m.name || m.model_api_id;
-              const copyValue = m.model_api_id || m.name;
+              const rawName = m.name || m.model_api_id;
+              const modelName = formatModelDisplayName(rawName);
+              const copyValue = m.model_api_id || modelName;
 
               return (
                 <tr key={m.id} className="hover:bg-amber-500/5 dark:hover:bg-amber-500/10 transition-colors group">

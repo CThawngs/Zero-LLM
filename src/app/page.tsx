@@ -5,7 +5,7 @@ import type { ProviderWithModels, FlatModel, RealtimeStatus } from '@/lib/types'
 import { fetchProvidersWithModels, fetchModelsFlat } from '@/lib/data';
 import { subscribeToProvidersAndModels } from '@/lib/realtime';
 import { trackPageView, trackCtaClick } from '@/lib/track';
-import { Github, ExternalLink } from 'lucide-react';
+import { Github, ExternalLink, AlertCircle } from 'lucide-react';
 import { NewDiscoveries } from '@/components/NewDiscoveries';
 import { StatisticsSection } from '@/components/StatisticsSection';
 import { ControlsSection, ControlsState } from '@/components/ControlsSection';
@@ -56,24 +56,33 @@ export default function HomePage() {
     }
   }, []);
 
-  const triggerRealtimeScan = useCallback(async () => {
+  const triggerRealtimeScan = useCallback(async (isManual = false) => {
     setIsScanning(true);
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 15000);
     try {
       const res = await fetch('/api/scan-providers', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ forceFresh: true }),
+        body: JSON.stringify({ forceFresh: isManual }),
+        signal: controller.signal,
       });
-      const data = await res.json();
-      if (data?.success) {
-        if (data.scanned_at) {
-          setLastScannedAt(data.scanned_at);
+      clearTimeout(timer);
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.success) {
+          if (data.scanned_at) {
+            setLastScannedAt(data.scanned_at);
+          }
+          await loadData();
         }
-        await loadData();
       }
-    } catch (err) {
-      console.error('Realtime scanner error:', err);
+    } catch (err: any) {
+      if (err?.name !== 'AbortError') {
+        console.warn('Realtime scanner background sync notice:', err?.message || err);
+      }
     } finally {
+      clearTimeout(timer);
       setIsScanning(false);
     }
   }, [loadData]);
@@ -140,7 +149,7 @@ export default function HomePage() {
   return (
     <div className="space-y-10 py-6 max-w-7xl mx-auto px-4 sm:px-6">
       {/* SECTION 1: HERO TITLE & SUBTITLE */}
-      <section className="text-center space-y-3 py-4 max-w-3xl mx-auto">
+      <section className="text-center space-y-3 sm:space-y-4 pt-4 pb-1 max-w-3xl mx-auto">
         <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-slate-100 leading-tight">
           {locale === 'vi'
             ? 'Tổng hợp các Provider có Free LLM Model — Cập nhật Realtime'
@@ -151,10 +160,22 @@ export default function HomePage() {
             ? 'Thư viện tổng hợp toàn bộ các nhà cung cấp (Providers) có mô hình AI/LLM miễn phí trên thị trường. Dữ liệu được quét và cập nhật liên tục theo thời gian thực từ model Google Gemini mới nhất (Gemini-3.7-Flash).'
             : 'Comprehensive directory aggregating AI providers that offer free LLM models on the market, continuously indexed and updated in real-time by Google\'s latest Gemini Flash model (Gemini-3.7-Flash).'}
         </p>
+
+        {/* AI DISCLAIMER / SCAN NOTICE (Directly grouped with Hero description) */}
+        <div className="flex justify-center items-center pt-1 sm:pt-2 px-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-medium text-amber-800 dark:text-amber-300 bg-amber-500/10 border border-amber-500/25 dark:bg-amber-400/10 dark:border-amber-400/25 shadow-xs max-w-full text-center leading-normal">
+            <AlertCircle className="w-3.5 h-3.5 shrink-0 text-amber-600 dark:text-amber-400" />
+            <span className="break-words">
+              {locale === 'vi'
+                ? 'Lưu ý: Gemini AI có thể mắc sai lầm khi tìm kiếm/quét trên Internet.'
+                : 'Note: Gemini AI may make mistakes when searching/scanning the Internet.'}
+            </span>
+          </div>
+        </div>
       </section>
 
       {/* GITHUB REPO CALL-TO-ACTION BUTTON (CENTERED, THEME-ADAPTIVE & SMOOTH ANIMATION) */}
-      <div className="flex justify-center items-center my-4 sm:my-6">
+      <div className="flex justify-center items-center pt-2 sm:pt-3 pb-2 sm:pb-3">
         <a
           id="github-repo-button"
           href="https://github.com/CThawngs/Zero-LLM"

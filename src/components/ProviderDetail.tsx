@@ -11,7 +11,7 @@ import { ChartsSection } from './charts/Charts';
 import { ApiKeyGuideModal } from './ApiKeyGuideModal';
 import { useLocale } from './LocaleProvider';
 import { subscribeToProvidersAndModels } from '@/lib/realtime';
-import { formatContextWindow } from '@/lib/utils';
+import { formatContextWindow, formatModelDisplayName } from '@/lib/utils';
 import { ArrowLeft, ExternalLink, Key, Globe, Sparkles, X } from 'lucide-react';
 import { trackPageView, trackCtaClick } from '@/lib/track';
 
@@ -48,7 +48,7 @@ export function ProviderDetail({ provider: initialProvider, onClose }: ProviderD
     provider_logo_url: provider.logo_url,
     provider_is_free: provider.is_free,
     model_api_id: m.model_api_id,
-    name: m.name,
+    name: formatModelDisplayName(m.name || m.model_api_id),
     context_window: m.context_window,
     is_free: m.is_free,
     price_input_per_mtok: m.price_input_per_mtok,

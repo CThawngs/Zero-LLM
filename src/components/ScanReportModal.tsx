@@ -18,16 +18,27 @@ export function ScanReportModal({ onClose, onRefreshData }: ScanReportModalProps
 
   const fetchScanReport = async () => {
     setLoading(true);
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 15000);
     try {
-      const res = await fetch('/api/scan-providers', { method: 'POST' });
-      const data = await res.json();
-      if (data.success) {
-        setReportData(data);
-        if (onRefreshData) onRefreshData();
+      const res = await fetch('/api/scan-providers', {
+        method: 'POST',
+        signal: controller.signal,
+      });
+      clearTimeout(timer);
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.success) {
+          setReportData(data);
+          if (onRefreshData) onRefreshData();
+        }
       }
-    } catch (e) {
-      console.error('Scan report fetch error:', e);
+    } catch (e: any) {
+      if (e?.name !== 'AbortError') {
+        console.warn('Scan report fetch notice:', e?.message || e);
+      }
     } finally {
+      clearTimeout(timer);
       setLoading(false);
     }
   };

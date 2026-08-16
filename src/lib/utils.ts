@@ -214,6 +214,21 @@ export function matchesSearchQuery(
 export function getCanonicalProviderInfo(name: string, slug?: string): { canonicalSlug: string; canonicalName: string } {
   const norm = (name + ' ' + (slug || '')).toLowerCase();
   
+  if (norm.includes('orcarouter') || norm.includes('orca-router') || slug === 'orcarouter') {
+    return { canonicalSlug: 'orcarouter', canonicalName: 'OrcaRouter' };
+  }
+  if (norm.includes('xkiro') || norm.includes('kiro-ai') || slug === 'xkiro') {
+    return { canonicalSlug: 'xkiro', canonicalName: 'xKiro' };
+  }
+  if (norm.includes('zhipu') || norm.includes('bigmodel') || norm.includes('glm-4-flash')) {
+    return { canonicalSlug: 'zhipu-ai', canonicalName: 'Zhipu AI (BigModel)' };
+  }
+  if (norm.includes('infini') || norm.includes('infinigence')) {
+    return { canonicalSlug: 'infini-ai', canonicalName: 'Infini-AI (Infinigence)' };
+  }
+  if (norm.includes('aihubmix')) {
+    return { canonicalSlug: 'aihubmix', canonicalName: 'AiHubMix' };
+  }
   if (norm.includes('cloudflare')) {
     return { canonicalSlug: 'cloudflare-workers-ai', canonicalName: 'Cloudflare Workers AI' };
   }
@@ -320,5 +335,38 @@ export function deduplicateAndMergeProviders<T extends { id: string; name: strin
   }
 
   return Array.from(map.values());
+}
+
+/**
+ * Cleans and formats model display name:
+ * 1. Removes all parentheses `(...)`, brackets `[...]`, `{...}` along with their inner contents.
+ * 2. Preserves casing (upper/lower case as provided by provider).
+ * 3. Replaces spaces and underscores with hyphens `-` (no spaces allowed).
+ * 4. Cleans redundant hyphens/spaces and trims ends.
+ */
+export function formatModelDisplayName(rawName: string | null | undefined): string {
+  if (!rawName) return '';
+
+  // 1. Remove all parentheses, brackets, curly braces and their inner content
+  let cleaned = rawName
+    .replace(/\([^()]*\)/g, '')
+    .replace(/\[[^[\]]*\]/g, '')
+    .replace(/\{[^{}]*\}/g, '');
+
+  // Second pass in case of remaining or adjacent brackets
+  cleaned = cleaned
+    .replace(/\([^()]*\)/g, '')
+    .replace(/\[[^[\]]*\]/g, '')
+    .replace(/\{[^{}]*\}/g, '')
+    .replace(/[()[\]{}]/g, ''); // strip any dangling bracket chars
+
+  // 2. Normalize and replace spaces, underscores, multiple hyphens with a single hyphen
+  cleaned = cleaned
+    .trim()
+    .replace(/[\s_]+/g, '-') // spaces and underscores to hyphens
+    .replace(/-+/g, '-')     // collapse multiple consecutive hyphens
+    .replace(/^[-:/. ]+|[-:/. ]+$/g, ''); // trim leading/trailing hyphens/colons/slashes/dots
+
+  return cleaned || rawName.trim().replace(/\s+/g, '-');
 }
 

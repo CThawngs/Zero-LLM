@@ -14,7 +14,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import type { ProviderWithModels } from '@/lib/types';
-import { formatContextWindow, getModelCategoryInfo } from '@/lib/utils';
+import { formatContextWindow, getModelCategoryInfo, formatModelDisplayName } from '@/lib/utils';
 import { CopyModelButton } from './CopyModelButton';
 import { ProviderDetail } from './ProviderDetail';
 import { ProviderLogo } from './ProviderLogo';
@@ -338,8 +338,9 @@ export function ProviderAccordionTable({ providers }: ProviderAccordionTableProp
                   <div className="divide-y divide-slate-100 dark:divide-slate-800/40 bg-white/60 dark:bg-[#0B0E17]/40">
                     {displayedModels.map((mod) => {
                       const categoryInfo = getModelCategoryInfo(mod);
-                      const modelName = mod.name || mod.model_api_id;
-                      const copyValue = mod.model_api_id || mod.name;
+                      const rawName = mod.name || mod.model_api_id;
+                      const modelName = formatModelDisplayName(rawName);
+                      const copyValue = mod.model_api_id || modelName;
 
                       return (
                         <div
