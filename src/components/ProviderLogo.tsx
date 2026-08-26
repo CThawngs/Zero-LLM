@@ -119,6 +119,54 @@ function getProviderVectorLogo(name: string) {
     );
   }
 
+  if (lower.includes('zenmux') || lower.includes('zen-mux') || lower === 'zen') {
+    return (
+      <svg viewBox="0 0 24 24" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="6" fill="#7C3AED" />
+        <path
+          d="M6 7H18L8 17H18"
+          stroke="white"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <circle cx="16" cy="12" r="1.5" fill="#38BDF8" />
+        <circle cx="8" cy="12" r="1.5" fill="#A78BFA" />
+      </svg>
+    );
+  }
+
+  if (lower.includes('opencode') || lower.includes('open-code')) {
+    return (
+      <svg viewBox="0 0 24 24" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="6" fill="#0EA5E9" />
+        <path
+          d="M8.5 8.5L5 12L8.5 15.5M15.5 8.5L19 12L15.5 15.5M13.5 6.5L10.5 17.5"
+          stroke="white"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
+  }
+
+  if (lower.includes('aihubmix')) {
+    return (
+      <svg viewBox="0 0 24 24" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="6" fill="#4F46E5" />
+        <path
+          d="M7 17L12 7L17 17M9 13.5H15M17 14L20 17M7 14L4 17"
+          stroke="white"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <circle cx="12" cy="7" r="1.5" fill="#38BDF8" />
+      </svg>
+    );
+  }
+
   if (lower.includes('nvidia')) {
     return (
       <svg viewBox="0 0 24 24" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -239,8 +239,8 @@ export function filterAndSortModels(flatModels: FlatModel[], filter: FilterState
   const propKey = keyMap[filter.sort_by] || 'context_window';
 
   result.sort((a, b) => {
-    let va: any = a[propKey];
-    let vb: any = b[propKey];
+    const va: any = a[propKey];
+    const vb: any = b[propKey];
     if (va == null && vb == null) return 0;
     if (va == null) return dir;
     if (vb == null) return -dir;

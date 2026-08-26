@@ -2,18 +2,31 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import type { ProviderWithModels, FlatModel } from '@/lib/types';
 import { ProviderLogo } from './ProviderLogo';
 import { StatCard } from './StatCard';
 import { ModelTable } from './ModelTable';
 import { ModelSearchBox, ModelFilterState } from './ModelSearchBox';
-import { ChartsSection } from './charts/Charts';
 import { ApiKeyGuideModal } from './ApiKeyGuideModal';
 import { useLocale } from './LocaleProvider';
 import { subscribeToProvidersAndModels } from '@/lib/realtime';
 import { formatContextWindow, formatModelDisplayName } from '@/lib/utils';
 import { ArrowLeft, ExternalLink, Key, Globe, Sparkles, X } from 'lucide-react';
 import { trackPageView, trackCtaClick } from '@/lib/track';
+
+const ChartsSection = dynamic(
+  () => import('./charts/Charts').then((mod) => mod.ChartsSection),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 my-8">
+        <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 h-80 animate-pulse" />
+        <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 h-80 animate-pulse" />
+      </div>
+    ),
+  }
+);
 
 interface ProviderDetailProps {
   provider: ProviderWithModels;

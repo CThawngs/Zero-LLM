@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { X, CheckCircle2, ExternalLink, RefreshCw, Database, ShieldCheck, Github, Layers, Zap, Search } from 'lucide-react';
 import { useLocale } from './LocaleProvider';
 
@@ -16,7 +16,7 @@ export function ScanReportModal({ onClose, onRefreshData }: ScanReportModalProps
   const [activeTab, setActiveTab] = useState<'repos' | 'providers'>('repos');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const fetchScanReport = async () => {
+  const fetchScanReport = useCallback(async () => {
     setLoading(true);
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 15000);
@@ -41,11 +41,11 @@ export function ScanReportModal({ onClose, onRefreshData }: ScanReportModalProps
       clearTimeout(timer);
       setLoading(false);
     }
-  };
+  }, [onRefreshData]);
 
   useEffect(() => {
     fetchScanReport();
-  }, []);
+  }, [fetchScanReport]);
 
   const filteredRepos = (reportData?.scanned_repos || []).filter((r: any) =>
     r.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

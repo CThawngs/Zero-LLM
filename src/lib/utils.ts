@@ -217,6 +217,12 @@ export function getCanonicalProviderInfo(name: string, slug?: string): { canonic
   if (norm.includes('orcarouter') || norm.includes('orca-router') || slug === 'orcarouter') {
     return { canonicalSlug: 'orcarouter', canonicalName: 'OrcaRouter' };
   }
+  if (norm.includes('zenmux') || norm.includes('zen-mux') || slug === 'zenmux') {
+    return { canonicalSlug: 'zenmux', canonicalName: 'ZenMux' };
+  }
+  if (norm.includes('opencode') || norm.includes('open-code') || slug === 'opencode') {
+    return { canonicalSlug: 'opencode', canonicalName: 'OpenCode' };
+  }
   if (norm.includes('xkiro') || norm.includes('kiro-ai') || slug === 'xkiro') {
     return { canonicalSlug: 'xkiro', canonicalName: 'xKiro' };
   }
@@ -227,7 +233,7 @@ export function getCanonicalProviderInfo(name: string, slug?: string): { canonic
     return { canonicalSlug: 'infini-ai', canonicalName: 'Infini-AI (Infinigence)' };
   }
   if (norm.includes('aihubmix')) {
-    return { canonicalSlug: 'aihubmix', canonicalName: 'AiHubMix' };
+    return { canonicalSlug: 'aihubmix', canonicalName: 'AIHubMix' };
   }
   if (norm.includes('cloudflare')) {
     return { canonicalSlug: 'cloudflare-workers-ai', canonicalName: 'Cloudflare Workers AI' };

@@ -8,8 +8,10 @@ You are an expert AI infrastructure analyst with live Google web search capabili
 Perform deep real-time web search and analysis on the global landscape of AI model routers, unified API gateways, and cloud inference platforms that offer 100% FREE LLM APIs, developer free tiers, or 0$ token endpoints.
 
 SEARCH & ANALYZE TARGETS:
-1. Multi-Model Free AI Routers & Unified Gateways (similar to OrcaRouter & xKiro):
+1. Multi-Model Free AI Routers & Unified Gateways (similar to OrcaRouter, ZenMux, OpenCode & xKiro):
    - OrcaRouter (https://www.orcarouter.ai): Search verified free models like deepseek/deepseek-v4-flash-free, deepseek/deepseek-v4-pro-free, qwen/qwen3.8-27b-free. (external_url: https://www.orcarouter.ai/models/{model_id})
+   - ZenMux (https://zenmux.ai): Search verified free models with Base URL https://zenmux.ai/api/v1 (dots-studio/dots3-note-prev, z-ai/glm-5.3-free, sapiens-ai/agnes-2.5-flash, inclusionai/ling-3.0-tiny, sapiens-ai/agnes-2.0-flash, z-ai/glm-4.7-flash-free, z-ai/glm-4.6v-flash-free). (external_url: https://zenmux.ai/{model_id})
+   - OpenCode (https://opencode.ai): Search verified free models with Base URL https://opencode.ai/zen/v1 (ox/ox-alpha-free, nvidia/nemotron-3.5-lightning-free, nvidia/nemotron-3-ultra-free, muse/spark-1.2-free, laguna/laguna-s-2.1-free, hy/hy3-free, xiaomi/mimo-v2.5-free, deepseek/deepseek-v4-flash-free). (external_url: https://opencode.ai/)
    - xKiro (https://xkiro.com): Search all free models at https://xkiro.com/dashboard/models?sort=recommended&price=free (mistralai/mistral-large-2512, minimax/minimax-m2.7, deepseek/deepseek-v4-pro, qwen/qwen3.8-max, xiaomi/mimo-v2.5-pro, deepseek/deepseek-v4-flash, qwen/qwen3.7-max, etc. NEVER include gpt-5.6-luna as it is paid).
    - OpenRouter (https://openrouter.ai): Search all 0$ models with ':free' suffix or free tier at https://openrouter.ai/models?max_price=0.
    - SiliconFlow / SiliconCloud (https://cloud.siliconflow.cn): Search free models with 0$ pricing like DeepSeek-V3, Qwen2.5-7B, GLM-4-9B-Chat.
@@ -366,8 +368,14 @@ export async function discoverProvidersWithGemini(forceFresh = false): Promise<P
             const modelId = m.model_api_id;
 
             // Automatically resolve exact official model URLs
-            if (lowerSlug.includes('orcarouter') || lowerSlug.includes('orca')) {
+            if (lowerSlug.includes('aihubmix')) {
+              modelUrl = `https://aihubmix.com/model/${modelId}`;
+            } else if (lowerSlug.includes('orcarouter') || lowerSlug.includes('orca')) {
               modelUrl = `https://www.orcarouter.ai/models/${modelId}`;
+            } else if (lowerSlug.includes('zenmux') || lowerSlug.includes('zen')) {
+              modelUrl = `https://zenmux.ai/${modelId}`;
+            } else if (lowerSlug.includes('opencode')) {
+              modelUrl = 'https://opencode.ai/';
             } else if (lowerSlug.includes('xkiro') || lowerSlug.includes('kiro')) {
               modelUrl = 'https://xkiro.com/dashboard/models?sort=recommended&price=free';
             } else if (lowerSlug.includes('openrouter')) {

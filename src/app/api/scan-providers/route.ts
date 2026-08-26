@@ -23,28 +23,28 @@ export async function POST(req: Request) {
         name: 'Awesome Free LLM APIs (134+ Free APIs / 40+ Providers)',
         url: 'https://github.com/open-free-llm-api/awesome-freellm-apis',
         category: 'Curated Free APIs',
-        verified_providers: ['OrcaRouter', 'xKiro', 'Groq', 'OpenRouter', 'Google AI Studio', 'GitHub Models', 'NVIDIA Build NIMs'],
+        verified_providers: ['AIHubMix', 'OrcaRouter', 'ZenMux', 'OpenCode', 'xKiro', 'Groq', 'OpenRouter', 'Google AI Studio', 'GitHub Models', 'NVIDIA Build NIMs'],
       },
       {
         repo: 'ShaikhWarsi/free-ai-tools',
         name: 'Curated Free & Low Cost AI Tools & Infrastructure',
         url: 'https://github.com/ShaikhWarsi/free-ai-tools',
         category: 'Developer Infrastructure',
-        verified_providers: ['Cerebras AI', 'SambaNova Systems', 'Hugging Face Inference API', 'xKiro'],
+        verified_providers: ['Cerebras AI', 'SambaNova Systems', 'Hugging Face Inference API', 'ZenMux', 'OpenCode', 'xKiro'],
       },
       {
         repo: 'for-the-zero/Free-LLM-Collection',
         name: 'Free LLM API Collection (免费大模型API合集)',
         url: 'https://github.com/for-the-zero/Free-LLM-Collection',
         category: 'Global & CN Free APIs',
-        verified_providers: ['SiliconFlow (SiliconCloud)', 'xKiro', 'OrcaRouter', 'OpenRouter', 'Groq'],
+        verified_providers: ['SiliconFlow (SiliconCloud)', 'ZenMux', 'OpenCode', 'xKiro', 'OrcaRouter', 'OpenRouter', 'Groq'],
       },
       {
         repo: 'MrFadiAi/free-llm-gateway',
         name: 'Unified Free LLM Gateway & Routers (18+ Free Providers)',
         url: 'https://github.com/MrFadiAi/free-llm-gateway',
         category: 'API Gateways & Routers',
-        verified_providers: ['OrcaRouter', 'xKiro', 'Groq', 'NVIDIA Build NIMs', 'SambaNova Systems', 'Cerebras AI'],
+        verified_providers: ['OrcaRouter', 'ZenMux', 'OpenCode', 'xKiro', 'Groq', 'NVIDIA Build NIMs', 'SambaNova Systems', 'Cerebras AI'],
       },
       {
         repo: 'nejib1/Free-LLM',
@@ -344,6 +344,10 @@ export async function POST(req: Request) {
             // Ensure verified, direct official URL for each model
             if (lowerSlug.includes('orcarouter') || lowerSlug.includes('orca')) {
               modelUrl = `https://www.orcarouter.ai/models/${modelId}`;
+            } else if (lowerSlug.includes('zenmux') || lowerSlug.includes('zen')) {
+              modelUrl = `https://zenmux.ai/${modelId}`;
+            } else if (lowerSlug.includes('opencode')) {
+              modelUrl = 'https://opencode.ai/';
             } else if (lowerSlug.includes('xkiro') || lowerSlug.includes('kiro')) {
               modelUrl = 'https://xkiro.com/dashboard/models?sort=recommended&price=free';
             } else if (lowerSlug.includes('openrouter')) {

@@ -8,7 +8,7 @@ export async function GET() {
   const url = process.env.SUPABASE_PROJECT_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  let providersList = INITIAL_PROVIDERS;
+  const providersList = INITIAL_PROVIDERS;
   
   if (url && key && !url.includes('your-supabase-project')) {
     try {

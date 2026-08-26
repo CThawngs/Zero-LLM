@@ -7,9 +7,9 @@ import { subscribeToProvidersAndModels } from '@/lib/realtime';
 import { trackPageView, trackCtaClick } from '@/lib/track';
 import { Github, ExternalLink, AlertCircle } from 'lucide-react';
 import { NewDiscoveries } from '@/components/NewDiscoveries';
-import { StatisticsSection } from '@/components/StatisticsSection';
 import { ControlsSection, ControlsState } from '@/components/ControlsSection';
 import { ProviderAccordionTable } from '@/components/ProviderAccordionTable';
+import { StatisticsSection } from '@/components/StatisticsSection';
 import { useLocale } from '@/components/LocaleProvider';
 import { getModelCategoryInfo, matchesSearchQuery } from '@/lib/utils';
 
